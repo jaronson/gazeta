@@ -1,0 +1,68 @@
+$color-lightest: #fff;
+$color-light: #fff;
+
+$color-dark: #2f2b23;
+$color-darkest: #000;
+
+$color-medium-dark: lighten($color-dark, 20%);
+$color-medium: lighten($color-dark, 50%);
+$color-neutral: lighten($color-dark, 80%);
+
+$color-orange:   #ed5815;
+$color-green:    #57b258;
+$color-blue:     #6a82ba;
+$color-pink:     #f1446f;
+$color-yellow:   #fdd846;
+$color-teal:     #73beb3;
+
+$color-brown-pale-cool: #c7b299;
+$color-brown-light-cool: #998675;
+$color-brown-med-cool: #736357;
+$color-brown-dark-cool: #534741;
+$color-brown-darker-cool: #362f2d;
+$color-brown-darkest-cool: #231f20;
+
+$color-brown-pale-warm: #c69c6d;
+$color-brown-light-warm: #a67c52;
+$color-brown-med-warm: #8c6239;
+$color-brown-dark-warm: #754c24;
+$color-brown-darker-warm: #603913;
+$color-brown-darkest-warm: #422b23;
+
+$primary-colors:
+  orange $color-orange $color-light,
+  green $color-green $color-light,
+  blue $color-blue $color-light,
+  pink $color-pink $color-dark,
+  yellow $color-yellow $color-dark,
+  teal $color-teal $color-dark;
+
+@each $item in $primary-colors {
+  $name: nth($item, 1);
+  $color: nth($item, 2);
+  $offset: nth($item, 3);
+
+  .bg-#{ $name } {
+    background-color: $color !important;
+
+    h1,h2,h3,h4,h5,h6 {
+      color: $offset;
+    }
+  }
+}
+
+.bg-light {
+  background-color: $color-light !important;
+}
+
+.bg-neutral {
+  background-color: $color-neutral !important;
+}
+
+@function color-neutral($base){
+  @return lighten($base, 20%);
+}
+
+@function color-medium($base){
+  @return darken($base, 20%);
+}

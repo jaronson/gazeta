@@ -1,0 +1,61 @@
+@mixin responsive-media-headers($headers...){
+  $queries: small $small, medium $medium, large $large;
+
+  @each $item in $queries {
+    $screen: nth($item, 1);
+    $query:  nth($item, 2);
+
+    @media #{ $query }{
+      @each $header in $headers {
+        #{ $header}{ font-size: get-header-size-for-screen($header, $screen); }
+      }
+    }
+  }
+}
+
+@mixin responsive($attribute, $queries...){
+  @each $item in $queries {
+    $screen: nth($item, 1);
+    $value: nth($item, 2);
+
+    @media #{ $screen } {
+      #{ $attribute }: #{ $value }
+    }
+  }
+}
+
+@mixin webfont($family, $directory, $filename, $weight: normal, $style: normal){
+  @font-face {
+    font-family: $family;
+
+    src: url('/fonts/#{ $directory }/#{ $filename }-webfont.eot');
+    src: url('/fonts/#{ $directory }/#{ $filename }-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/#{ $directory }/#{ $filename }-webfont.woff') format('woff'),
+         url('/fonts/#{ $directory }/#{ $filename }.ttf') format('truetype');
+    font-weight: $weight;
+    font-style:  $style;
+  }
+}
+
+@mixin webfonts($family, $path, $attributes...){
+  @each $attr in $attributes {
+    $file:   nth($attr, 1);
+    $weight: nth($attr, 2);
+    $style:  nth($attr, 3);
+    @include webfont($family, $path, $file, $weight, $style);
+  }
+}
+
+@mixin fixed-background($background-image: null){
+  @if $background-image != null {
+    background-image: url(#{ $background-image });
+  }
+  background-position: top center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+

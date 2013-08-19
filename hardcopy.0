@@ -1,0 +1,63 @@
+307                                                                                                                   |103
+308       var minSize, maxLetterCount;                                                                                |104     this.fontSize = {
+309                                                                                                                   |105       calculated: scopedElement.baseFontSize * this.ratio
+310       // Before resize                                                                                            |106     };
+311       lineScope.each(function(i){                                                                                 |107
+312         // Preserve the container's height to avoid flicker                                                       |108     //console.log($(window).width(), this.containerWidth, this.textWidth, this.ratio, scopedElement.baseFontSize)
+313         // Set lines inline in order to determine the text width                                                  |109   };
+314         $(this).css({                                                                                             |110
+315           'display': 'inline',                                                                                    |111   $fn.ScopedElement = function(element, options){
+316           'font-size': $fn.emBase                                                                                 |112     var self = this;
+317         });                                                                                                       |113     var initialized = false;
+318                                                                                                                   |114     var comparator;
+319         var textObj = getTextObject(this);                                                                        |115
+320         var calculatedSize = getLineSize(containerObj, textObj, opts);                                            |116     var stylesBefore = [];
+321         var textLength = $(this).text().length;                                                                   |117     var stylesAfter  = [];
+322                                                                                                                   |118
+323         minSize = minSize || calculatedSize;                                                                      |119     this.textSelector = '*';
+324         minSize = calculatedSize < minSize ? calculatedSize: minSize;                                             |120
+325                                                                                                                   |121     this.comparator = function(){
+326         maxLetterCount = maxLetterCount || textLength;                                                            |122       return comparator;
+327         maxLetterCount = textLength < maxLetterCount ? maxLetterCount : textLength;                               |123     };
+328                                                                                                                   |124
+329         lineSet.push({                                                                                            |125     this.get = function(){
+330           calculatedSize: calculatedSize,                                                                         |126       return $(self.element);
+331           length:         $(this).text().length                                                                   |127     };
+332         });                                                                                                       |128
+333       });                                                                                                         |129     this.resize = function(){
+334                                                                                                                   |130       beforeResize();
+335       // After resize                                                                                             |131
+336       lineScope.each(function(i){                                                                                 |132       var size = self.size();
+337         var sizeObj = lineSet[i];                                                                                 |133
+338         sizeObj.effectiveSize  = minSize;                                                                         |134       self.text().animate({
+339         sizeObj.maxLetterCount = maxLetterCount;                                                                  |135         'font-size': size.fontSize.calculated
+340         sizeObj.lineHeight     = containerObj.lineHeight;                                                         |136       },
+341                                                                                                                   |137         self.options.resizeAnimation.speed,
+342         updateLineCss(this, sizeObj, opts);                                                                       |138         self.options.resizeAnimation.easing
+343                                                                                                                   |139       );
+344         if(i == lineScope.length - 1){                                                                            |140
+345           //containerObj.element.fadeTo(opts.resizeDuration, 1);                                                  |141       afterResize();
+346         }                                                                                                         |142     };
+347       });                                                                                                         |143
+348     };                                                                                                            |144     this.queueResize = function(){
+349                                                                                                                   |145       $fn.func.queueResize(self);
+350     var queueFill = function(scope, opts){                                                                        |146     };
+351     };                                                                                                            |147
+352                                                                                                                   |148     this.size = function(){
+353     var init = function(evt){                                                                                     |149       return getSizeObject();
+354       $fn.emBase = parseFloat($('body').css('font-size'));                                                        |150     };
+355       $fn.defaultOptions.emBase = $fn.emBase;                                                                     |151
+356                                                                                                                   |152     this.text = function(){
+357       var selector = evt.data.selector;                                                                           |153       return this.get().find(this.textSelector);
+358                                                                                                                   |154     };
+359       for(var i = 0, l = $(selector).length; i < l; ++i){                                                         |155
+360         var element = $(selector).get(i);                                                                         |156     var addStyle = function(when, styleObject){
+361         var opts  = parseSizeOptions($.extend({}, $fn.defaultOptions, evt.data.options));                         |157       if(when == 'before'){
+362         var scope = $(element);                                                                                   |158         stylesBefore.push(styleObject);
+363                                                                                                                   |159       } else if(when == 'after'){
+364         opts.text = scope.text();                                                                                 |160         stylesAfter.push(styleObject);
+365                                                                                                                   |161       }
+366         $(window).on('resize', function(){                                                                        |162     };
+367           if(typeof $fn.screenWidth == 'undefined' || $(window).width() != $fn.screenWidth){                      |163
+public/js/jquery.textfill.1.js  0327,0011 len: 378                                                                     public/js/jquery.textfill.js  0119,0003 len: 308
+"public/js/jquery.textfill.js" 308L, 7358C written

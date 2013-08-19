@@ -1,0 +1,10 @@
+!!! 5
+%html
+  %head
+    %meta{ :name => 'viewport', :content => 'width=device-width' }
+    %link{ :rel => 'stylesheet', :type => 'text/css', :href => '/css/styles.css', :media => 'screen' }
+  %body
+    = yield
+    %script{ :type => 'text/javascript', :src => '/js/jquery.min.js' }
+    %script{ :type => 'text/javascript', :src => '/js/jquery.textfill.js' }
+    %script{ :type => 'text/javascript', :src => '/js/app.js' }

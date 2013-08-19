@@ -1,0 +1,55 @@
+@function get-header-size($header){
+  $default-size: 1em;
+  $headers:
+    h1 $h1-font-size,
+    h2 $h2-font-size,
+    h3 $h3-font-size,
+    h4 $h4-font-size,
+    h5 $h5-font-size,
+    h6 $h6-font-size;
+
+  @each $item in $headers {
+    $h: nth($item, 1);
+    $s: nth($item, 2);
+
+    @if $h == $header {
+      @return $s;
+    }
+  }
+
+  @return $default-size;
+}
+
+@function get-header-size-for-screen($header, $screen){
+  $size: get-header-size($header);
+
+  @if $screen == 'medium' {
+    $size: small-to-medium($size);
+  }
+
+  @else if $screen == 'large' {
+    $size: small-to-large($size);
+  }
+
+  @return $size;
+}
+
+@function small-to-medium($size){
+  @return $size * ($medium-screen / $small-screen);
+}
+
+@function small-to-large($size){
+  @return $size * ($large-screen / $small-screen);
+}
+
+@function medium-to-small($size){
+  @return $size * ($small-screen / $medium-screen);
+}
+
+@function large-to-medium($size){
+  @return $size * ($medium-screen / $large-screen);
+}
+
+@function large-to-small($size){
+  @return $size * ($small-screen / $large-screen);
+}
