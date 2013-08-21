@@ -27,14 +27,13 @@
     textWrapElement:  'span',
     lineWrapClass:    'textfill-line',
     wordWrapClass:    'textfill-word',
-    applyTracking:    false,
+    tracking:         false,
     resizeAnimation:  {
       speed:  0,
       easing: 'linear'
     },
     before: null,
-    after:  null,
-    lastSibling: false
+    after:  null
   };
 
   $fn.util  = {};
@@ -113,31 +112,33 @@
     var opts = options || {};
 
     if($children.length > 0){
-      opts.parentScope = $scope;
-
       $children.each(function(i){
-        if(i == $children.length - 1){
-          opts.lastSibling = true;
+        opts.parentScope = $scope;
+
+        if(i == ($children.length - 1)){
+          opts.lastChild = true;
         }
 
-        $fn.func.addElement(this, opts);
+        $fn.func.addElement(this, $.extend({}, opts));
       });
     } else {
       $scope.each(function(){
-        $fn.func.addElement(this, opts);
+        $fn.func.addElement(this, $.extend({}, options));
       });
     }
   };
 
   $fn.func.findByParent = function(scope){
     return $fn.scope.filter(function(scopedElement){
-      return scopedElement.parentScope == scope;
+      if(scopedElement.parentScope() == scope){
+        return scopedElement;
+      }
     });
   };
 
   $fn.func.queueResize = function(){
-    var scopedElement;
     var queueName;
+    var scopedElement;
 
     if(typeof arguments[0] == 'string'){
       queueName     = arguments[0];
@@ -177,7 +178,20 @@
     this.ratio          = this.containerWidth / this.textWidth;
 
     var calculatedSize = scopedElement.baseFontSize * this.ratio;
-    var effectiveSize  = false
+    var effectiveSize  = false;
+
+    this.setMinimumForChildren = function(children){
+      var range = children.map(function(e){
+        return e.cachedSize.fontSize.effective;
+      });
+
+      var min = Math.min.apply(null, range);
+
+      children.map(function(e){
+        e.cachedSize.fontSize.sibling = min;
+        e.cachedSize.fontSize.effective = min;
+      });
+    };
 
     var setEffectiveSize = function(){
       var opts = scopedElement.options;
@@ -195,7 +209,8 @@
 
     this.fontSize = {
       calculated: calculatedSize,
-      effective:  effectiveSize || calculatedSize
+      sibling:    null,
+      effective:  effectiveSize || calculatedSize,
     };
   };
 
@@ -208,8 +223,8 @@
     var parentScope;
     var comparator;
 
+    this.baseFontSize = null;
     this.textSelector = '*';
-    this.lastSibling  = false;
     this.cachedSize   = null;
 
     this.comparator = function(){
@@ -218,6 +233,10 @@
 
     this.get = function(){
       return $(self.element);
+    };
+
+    this.lastChild = function(){
+      return options.lastChild;
     };
 
     this.parentScope = function(){
@@ -234,8 +253,38 @@
 
     this.resize = function(){
       beforeResize();
-      resizeText();
+      var size = self.size();
+
+      switch(self.queue()){
+        case 'parent':
+        break;
+
+        case 'minimum':
+          if(self.lastChild()){
+            resizeForMinimum();
+          }
+        break;
+        default:
+          self.resizeText();
+        break;
+      }
+
       afterResize();
+    };
+
+    this.resizeText = function(){
+      var styleObject = {};
+
+      styleObject['font-size'] = self.cachedSize.fontSize.effective;
+
+      if(self.options.tracking){
+        styleObject['letter-spacing'] = getLineTracking();
+      }
+
+      return self.text().animate(styleObject,
+        self.options.resizeAnimation.speed,
+        self.options.resizeAnimation.easing
+      );
     };
 
     this.siblings = function(){
@@ -306,6 +355,23 @@
       return comparator.remove();
     };
 
+    var getLineTracking = function(){
+      var diff = self.cachedSize.fontSize.calculated - self.cachedSize.fontSize.effective;
+      var px, em;
+
+      if(diff == 0){
+        return 'normal';
+      }
+
+      px = diff / self.textLength();
+      em = $fn.util.pxToEm(px, self.cachedSize.fontSize.effective);
+
+      console.log(self.text().text(), self.textLength(), self.baseFontSize, diff, px, em);
+
+      return px.toString() + 'px';
+      //return em.toString() + 'em'
+    };
+
     var getSizeObject = function(){
       return new $fn.SizeObject(self);
     };
@@ -314,25 +380,15 @@
       return $('<' + self.options.textWrapElement + '/>').addClass(className);
     };
 
-    var resizeText = function(){
-      var size = self.size();
-      var styleObject = {};
+    var resizeForMinimum = function(){
+      var children    = self.siblings().slice();
+      children.push(self);
 
-      switch(self.options.follow){
-        case 'parent':
-        break;
+      self.cachedSize.setMinimumForChildren(children);
 
-        case 'minimum':
-        break;
-
-        default:
-          styleObject['font-size'] = size.fontSize.effective;
-      }
-
-      return self.text().animate(styleObject,
-        self.options.resizeAnimation.speed,
-        self.options.resizeAnimation.easing
-      );
+      children.map(function(child){
+        child.resizeText();
+      });
     };
 
     var setBaseFontSize = function(){

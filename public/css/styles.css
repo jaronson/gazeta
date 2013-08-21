@@ -7036,14 +7036,23 @@ a.th {
   font-style: italic;
 }
 
-/* line 10, ../../sass/styles.scss */
+/* line 7, ../../sass/styles.scss */
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+/* line 11, ../../sass/styles.scss */
 h2 {
   font-family: "Century Expanded Web", "Georgia", "Times", serif;
 }
 
-/* line 14, ../../sass/styles.scss */
+/* line 15, ../../sass/styles.scss */
 h1 {
+  text-align: center;
+}
+
+/* line 19, ../../sass/styles.scss */
+.textfill {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  text-align: center;
 }

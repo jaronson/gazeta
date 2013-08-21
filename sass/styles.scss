@@ -4,7 +4,8 @@
 @import "responsivity/fonts/tradegothic";
 @import "responsivity/fonts/century_expanded_bt";
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p{
+  margin: 0;
 }
 
 h2 {
@@ -12,6 +13,9 @@ h2 {
 }
 
 h1 {
-  @include opacity(0);
   text-align: center;
+}
+
+.textfill {
+  @include opacity(0);
 }

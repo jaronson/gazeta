@@ -1,18 +1,21 @@
 $(document).ready(function(){
-  $('h1').textfill({
-    resizeAnimation: {
-      speed: 0
+  $textfill({
+    animate: {
+      resize: false
     },
-    after: function(){
-      this.get().fadeTo(400, 1);
+    animation: {
+      speed: 50
     }
   });
 
-  $('h2').textfill();
-
-  $('.textfill').textfill({
-    follow: 'minimum'
+  $('h1').textfill({
   });
 
-  console.log('app.js');
+  $('.big-block').textfill({
+    lineHeight: 'max'
+  });
+
+  $('.side-block').textfill({
+    lineHeight: 'min'
+  });
 });
