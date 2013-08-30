@@ -1,7 +1,9 @@
 ;(function($, window, document, undefined){
-  var $fn = window.$textfill = function(options){
+  window.$textfill = function(options){
     $.extend(true, $textfill.defaultOptions, options);
   };
+
+  var $fn = window.$textfill;
 
   $.extend($fn, {
     util: {},
@@ -16,26 +18,29 @@
 
     emBase:     16,
     scope:      [],
+    queue:      [],
+    runTimeout: 0,
     debug:      false,
     defaultOptions: {
+      follow:           null, // none, parent, minimum
       baseFontSize:     null,
       minFontSize:      null,
       maxFontSize:      null,
       gutter:           null,
-      fontSize:         null, // minimum, maximum, median, mean
-      lineHeight:       null, // minimum, maximum, median, mean
-      eachWord:         false,
-      breakpoints:      [],
+      gutterLeft:       null,
+      gutterRight:      null,
       textWrapElement:  'span',
       lineWrapClass:    'textfill-line',
       wordWrapClass:    'textfill-word',
-      letterWrapClass:  'textfill-letter',
-      applyTracking:    false,
+      tracking:         false,
+      lineHeight:       null, // minimum, maximum, median
       animation: {
         resizeDuration: 0,
         fadeDuration:   0,
-        easing:         'swing'
-      }
+        easing:         'linear'
+      },
+      before: null,
+      after:  null
     }
   });
 
@@ -66,12 +71,6 @@
     observeWindowResize();
 
     return $fn.initialized = true;
-  };
-
-  $fn.logger = {
-    warn: function(message, vars){
-      console.warn($fn.util.supplantString(message, vars));
-    }
   };
 
   $fn.util.arrayMin = function(values){
@@ -128,24 +127,9 @@
     return null;
   };
 
-  $fn.util.supplantString = function(s, o) {
-    if(typeof o == 'undefined'){
-      return s;
-    }
-
-    return s.replace(/{([^{}]*)}/g, function (a, b) {
-      var r = o[b];
-      return typeof r === 'string' || typeof r === 'number' ? r : a;
-    });
-  };
-
   $fn.func.addScope = function($scope, options){
     for(var i = 0, l = $scope.length; i < l; ++i){
-      var s = $($scope[i]);
-
-      if(!s.attr('data-textfill')){
-        $fn.func.addContainerSet(s, $.extend(true, {}, options));
-      }
+      $fn.func.addContainerSet($($scope[i]), $.extend(true, {}, options));
     }
   };
 
@@ -172,15 +156,9 @@
   };
 
   $fn.obj.ContainerSet = function($scope, options){
-    var self     = this;
-    var scope    = $scope;
-    var children = [];
-
-    var breakpoint     = false;
-    var lastBreakpoint = false;
-
-    var initialOptions  = options;
-    var initialContents = scope.html();
+    var self      = this;
+    var scope     = $scope;
+    var children  = [];
 
     this.options = function(){
       return options;
@@ -207,56 +185,23 @@
       return methods[key](self.childFontSizes());
     };
 
-    this.redraw = function(){
-      if(typeof breakpoint != 'number'){
-        var opts = $.extend({}, initialOptions, breakpoint);
-        setOptions(opts);
-      } else {
-        setOptions(initialOptions);
-      }
-
-      scope.html(initialContents);
-      children = [];
-
-      if(!self.options().disable){
-        addChildren();
-        self.resize();
-      }
-    };
-
     this.resize = function(){
-      if(hasBreakpoint()){
-        self.redraw();
-      } else {
-        for(var i = 0, l = children.length; i < l; ++i){
-          children[i].resize();
-        }
-
-        for(var i = 0, l = children.length; i < l; ++i){
-          children[i].finalize();
-        }
-
-        scope.fadeTo(self.options().animation.fadeDuration, 1);
+      for(var i = 0, l = children.length; i < l; ++i){
+        children[i].resize();
       }
+
+      for(var i = 0, l = children.length; i < l; ++i){
+        children[i].finalize();
+      }
+
+      scope.fadeTo(self.options().animation.fadeDuration, 1);
     };
 
     var addChildren = function(){
       var elements = scope.find(':css(display=block)');
 
-      if(self.options().eachWord){
-        var html  = scope.html();
-        var words = $.trim(html).split(' ');
-        scope.html('');
-
-        for(var i = 0, l = words.length; i < l; ++i){
-          var e = $('<div class="textfill-word">');
-          e.html(words[i]).appendTo(scope);
-          addChild(e, i);
-        }
-      } else if(elements.length > 0){
-        for(var i = 0, l = elements.length; i < l; ++i){
-          addChild(elements[i], i);
-        }
+      for(var i = 0, l = elements.length; i < l; ++i){
+        addChild(elements[i], i);
       }
 
       if(children.length == 0){
@@ -268,47 +213,11 @@
       children.push(new $fn.obj.TextContainer(self, child, index));
     };
 
-    var hasBreakpoint = function(){
-      var bp = findBreakpoint();
-
-      if(bp != breakpoint){
-        lastBreakpoint = breakpoint;
-        breakpoint = bp;
-        return true;
-      }
-
-      return false;
-    };
-
-    var findBreakpoint = function(){
-      var sw = $(window).width();
-      var breakpoints = self.options().breakpoints;
-
-      for(var i = 0, l = breakpoints.length; i < l; ++i){
-        var bw = breakpoints[i].screenWidth;
-
-        if(sw <= bw){
-          return breakpoints[i];
-        }
-      }
-
-      return -1;
-    };
-
     var setOptions = function(givenOptions){
       options = $.extend({}, $fn.defaultOptions, givenOptions);
 
-      options.minFontSize = $fn.util.parseSize(options.minFontSize);
-      options.maxFontSize = $fn.util.parseSize(options.maxFontSize);
-
-      if(options.breakpoints){
-        options.breakpoints = options.breakpoints.map(function(b){
-          b.screenWidth = parseInt(b.screenWidth);
-          return b;
-        }).sort(function(a,b){
-          return b.screenWidth < a.screenWidth;
-        });
-      }
+      self.options.minFontSize = $fn.util.parseSize(self.options.minFontSize);
+      self.options.maxFontSize = $fn.util.parseSize(self.options.maxFontSize);
     };
 
     var init = function(){
@@ -324,24 +233,13 @@
     var self   = this;
     var lines;
     var comparator;
-    var lineSelector;
-    var wordSelector;
-    var letterSelector;
-
-    var leftGutter  = 0;
-    var rightGutter = 0;
 
     var containerStyle = {};
     var lineStyle = {}
 
     var init = function(){
-
       addDataAttribute();
       setBaseFontSize();
-
-      lineSelector   = self.options().textWrapElement + '.' + self.options().lineWrapClass;
-      wordSelector   = self.options().textWrapElement + '.' + self.options().wordWrapClass;
-      letterSelector = self.options().textWrapElement + '.' + self.options().letterWrapClass;
 
       wrapLines();
     };
@@ -388,7 +286,6 @@
     };
 
     this.finalize = function(){
-      setConformedFontSize();
       setTracking();
       setLineHeight();
 
@@ -424,15 +321,13 @@
     };
 
     var setFontSize = function(){
-      var opts   = self.options();
-      var cw     = self.get().width();
-      var tw     = self.comparator().width();
-      var ratio  = cw / tw;
+      var opts  = self.options();
+      var ratio = self.get().width() / self.comparator().width();
 
       self.calculatedFontSize = self.baseFontSize * ratio;
 
       if(opts.maxFontSize && (self.calculatedFontSize > opts.maxFontSize)){
-        self.effectiveFontSize = opts.maxFontSize;
+        self.effectiveFontsize = opts.maxFontSize;
       }
 
       if(self.calculatedFontSize < opts.minFontSize){
@@ -444,25 +339,25 @@
     };
 
     var setGutter = function(){
-      if(!self.options().gutter){
+      if(!self.options().gutter || self.options().leftGutter || self.options().rightGutter){
         return false;
       }
 
       var opts = self.options();
-      var gutter;
+      var gutter, leftGutter, rightGutter;
 
       if(opts.gutter){
-        if(typeof opts.gutter == 'object' && opts.gutter != null){
-          if(opts.gutter.left){
-            leftGutter = $fn.util.parseSize(opts.gutter.left, self.get().width());
-          }
+        gutter = $fn.util.parseSize(opts.gutter, self.get().width());
+        leftGutter = gutter;
+        rightGutter = gutter;
+      }
 
-          if(opts.gutter.right){
-            rightGutter = $fn.util.parseSize(opts.gutter.right, self.get().width());
-          }
-        } else {
-          leftGutter = rightGutter = $fn.util.parseSize(opts.gutter, self.get().width()) / 2;
-        }
+      if(opts.gutterLeft){
+        leftGutter = $fn.util.parseSize(opts.gutterLeft, self.get().width());
+      }
+
+      if(opts.gutterRight){
+        rightGutter = $fn.util.parseSize(opts.gutterright, self.get().width());
       }
 
       if(leftGutter){
@@ -474,75 +369,49 @@
       }
     };
 
-    var getSiblingFontSize = function(opt){
-      var f = self.parent().getChildFontSize;
-      var value;
+    var setLineHeight = function(){
+      var lineHeightOpt = self.options().lineHeight;
 
-      switch(opt){
-        case 'minimum':
-        case 'min':
-          value = f('minimum') + 'px';
-          break;
-        case 'maximum':
-        case 'max':
-          value = f('maximum') + 'px';
-          break;
-        case 'median':
-          value = f('median') + 'px';
-          break;
-        case 'mean':
-        case 'average':
-          value = f('mean') + 'px';
-          break;
-        default:
-          value = false;
+      if(!lineHeightOpt){
+        return false;
       }
 
-      return value;
-    };
+      var lineHeight;
+      var f = self.parent().getChildFontSize;
 
-    var parseConformOpt = function(optName){
-      var opt = self.options()[optName];
-
-      if(typeof opt == 'object' && opt != null){
-        var fontSize = getSiblingFontSize(opt.conformTo);
-
-        if(!fontSize){
-          $fn.logger.warn('Invalid option: {a}.{b}', { a: optName, b: opt.conformTo });
+      if(lineHeightOpt){
+        switch(lineHeightOpt){
+          case 'minimum':
+          case 'min':
+            lineHeight = f('minimum') + 'px';
+            break;
+          case 'maximum':
+          case 'max':
+            lineHeight = f('maximum') + 'px';
+            break;
+          case 'median':
+            lineHeight = f('median') + 'px';
+            break;
+          case 'mean':
+          case 'average':
+            lineHeight = f('mean') + 'px';
+            break;
+          default:
+            lineHeight = lineHeightOpt;
         }
 
-        return fontSize;
-      } else if(typeof opt == 'undefined'){
-        return false;
-      } else {
-        return opt;
-      }
-    };
-
-    var setConformedFontSize = function(){
-      var fontSize = parseConformOpt('fontSize');
-
-      if(fontSize){
-        lineStyle['font-size'] = fontSize;
-      }
-    };
-
-    var setLineHeight = function(){
-      var lineHeight = parseConformOpt('lineHeight');
-
-      if(lineHeight){
         lineStyle['line-height'] = lineHeight;
         containerStyle['min-height'] = lineHeight;
       }
     };
 
     var setTracking = function(){
-      if(!self.options().applyTracking){
+      if(!self.options().tracking){
         return false;
       }
 
       var cw = self.get().width();
-      var mw = self.comparator().width();
+      var mw = self.minTextWidth;
       var tl = self.letterCount();
       var bs = self.baseFontSize;
       var fs = self.effectiveFontSize;
@@ -553,7 +422,9 @@
       px = diff / (tl - 1);
       em = $fn.util.pxToEm(px, fs).toString() + 'em';
 
-      var elements = self.get().find(letterSelector);
+      self.get().html(wrapLetters(self.get()));
+
+      var elements = self.get().find('span.textfill-letter');
 
       for(var i = 0, l = elements.length; i < l; ++i){
         if(i != elements.length - 1){
@@ -562,9 +433,9 @@
       }
     };
 
-    var getTextWrapper = function(className){
-      var className = className || self.options().lineWrapClass;
-      var el = $('<' + self.options().textWrapElement + '/>').addClass(className);
+    var getTextWrapper = function(){
+      var el = $('<' + self.options().textWrapElement + '/>').
+        addClass(self.options().lineWrapClass);
 
       if($fn.debug){
         el.attr('id', $fn.util.guid());
@@ -583,9 +454,7 @@
           var newText = this.wholeText;
 
           for(var i = 0, l = newText.length; i < l; ++i){
-            newHtml += "<" +
-              self.options().textWrapElement + " class='" + self.options().letterWrapClass + "'>" +
-              newText[i] + "</" + self.options().textWrapElement + ">";
+            newHtml += '<span class="textfill-letter">' + newText[i] + '</span>';
           }
           $temp.append($(newHtml));
         } else {
@@ -597,19 +466,15 @@
       return $temp.html();
     };
 
-    var wrapWord = function(html){
-      return getTextWrapper(self.options().wordWrapClass).html(html);
+    var wrapLine = function(html){
+      lines = getTextWrapper();
+      lines.html(html);
+
+      return self.get().html(lines);
     };
 
     var wrapLines = function(){
-      var html = $.trim(self.get().html());
-        lines = getTextWrapper();
-        lines.html(html);
-        self.get().html(lines);
-
-      if(self.options().applyTracking){
-        self.get().html(wrapLetters(self.get()));
-      }
+      return wrapLine($.trim(self.get().html()));
     };
 
     var createComparator = function(){
@@ -624,7 +489,8 @@
     };
 
     var destroyComparator = function(){
-      $('.textfill-comparator').remove();
+      comparator.remove();
+      comparator = null;
     };
 
     init();
@@ -640,5 +506,7 @@
     };
 
     $(window).load({ selector: this.selector, options: options }, start);
+
   };
 })(jQuery, this, this.document);
+

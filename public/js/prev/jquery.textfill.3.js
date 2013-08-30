@@ -35,7 +35,7 @@
       tracking:         false,
       lineHeight:       null, // minimum, maximum, median
       animate: {
-        resize: true,
+        resize: false,
         fade:   true
       },
       animation:  {
@@ -248,6 +248,7 @@
         return child.text().size().fontSize.effective;
       })
     };
+
     self.minChildFontSize = function(){
       return minChildFontSize = minChildFontSize || $fn.util.arrayMin(self.childFontSizes());
     };

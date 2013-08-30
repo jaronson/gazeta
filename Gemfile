@@ -8,6 +8,7 @@ group :assets do
   gem 'sass'
   gem 'compass'
   gem 'zurb-foundation'
+  gem 'coffee-script'
 end
 
 group :development do
