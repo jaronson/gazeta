@@ -1,8 +1,14 @@
 $(document).ready(function(){
-  $('h1').textfill();
+  $('.yt-player').ytplayer();
 
-  $('.banner.center').textfill({
-    lineHeight: '0.8em'
+  $('.intro h1').textfill({});
+
+  $('header ul.tags li a').click(function(){
+    $('header ul.tags li').removeClass('active');
+    $(this).parent().addClass('active');
   });
 
+  $(window).scroll(function(){
+    $('header').css('top', $(window).scrollTop());
+  });
 });

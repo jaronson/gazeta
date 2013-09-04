@@ -4,7 +4,11 @@
     %meta{ :name => 'viewport', :content => 'width=device-width' }
     %link{ :rel => 'stylesheet', :type => 'text/css', :href => '/css/styles.css', :media => 'screen' }
   %body
+    = haml :header
     = yield
+    %script{ :src => 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJCfnRfOtohEqUAMmA_mWWVFhnKf7LpU&sensor=false'}
+    %script{ :type => 'text/javascript', :src => '/js/swfobject.js' }
     %script{ :type => 'text/javascript', :src => '/js/jquery.min.js' }
     %script{ :type => 'text/javascript', :src => '/js/jquery.textfill.js' }
+    %script{ :type => 'text/javascript', :src => '/js/ytplayer.js' }
     %script{ :type => 'text/javascript', :src => '/js/app.js' }

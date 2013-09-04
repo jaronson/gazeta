@@ -1,0 +1,18 @@
+%figure{ :class => attrs[:category] }
+  %img{ :src => "/img/#{attrs[:image]}" }
+  %figcaption
+    - if attrs[:number]
+      %number= "#{attrs[:number]}."
+    - if attrs[:author]
+      %author= "#{attrs[:author]}."
+    - if attrs[:title]
+      %work= "#{attrs[:title]}."
+    - if attrs[:year]
+      %year= "#{attrs[:year]}."
+    - if attrs[:href]
+      %a{ :href => attrs[:href]} Link.
+    - if attrs[:media]
+      %media= "#{attrs[:media]}."
+    - if attrs[:tags]
+      - attrs[:tags].each do |tag|
+        %tag{ :class => tag }

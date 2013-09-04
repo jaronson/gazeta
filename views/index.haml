@@ -1,15 +1,38 @@
-.row
-  .small-12.columns
-    %h1.textfill jQuery.textfill
-.row
-  .small-4.columns
-    .banner
-  .small-4.columns
-    .banner.center
-      %h2 big
-      %h2 fat
-      %h2 fonts 
-  .small-1.columns
-    .banner
-      %h2 !
-  .small-4.columns
+.section.intro.mfm
+  = partial('mfm')
+
+%separator
+  %date.right 9/2/2013
+
+.section
+  .row
+    .small-8.columns
+      = part('figure', :image => 'iceberg.jpg', :title => 'Iceberg', :year => '2013', :media => 'Acrylic on canvas', :tags => ['ephemera', 'art'])
+    .small-4.columns
+      %lyrics
+        %worktitle Be Kind
+        %p
+          be kind, be gentle, be meek<br/>
+          know that all living seek<br/>
+          a roof of banana leaves<br/>
+          the thought some familiar life breathes<br/>
+          so be kind, be gentle, be meek
+        %p
+          be kind, be gentle, be meek<br/>
+          know that all living seek<br/>
+          to drink, to break bread<br/>
+          to be comforted, to be fed<br/>
+          so be kind, be gentle, be meek
+        %p
+          there will forever be power in pain<br/>
+          your walk one of silence and dread<br/>
+          when you feel too much wrought<br/>
+          be calmed by the thought<br/>
+          we all grasp a common thread<br/>
+        %p
+          be kind, be gentle, be meek<br/>
+          know that all living seek<br/>
+          to have and to hold<br/>
+          young old<br/>
+          be kind, be gentle, be meek
+          %tag{ :class => 'music' }

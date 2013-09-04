@@ -1,6 +1,9 @@
 ;(function($, window, document, undefined){
-  var $fn = window.$textfill = function(options){
-    $.extend(true, $textfill.defaultOptions, options);
+  var $fn = $.textfill = function(options){
+    $fn.func.addGlobalCallbacks(options);
+    $.extend(true, $.textfill.defaultOptions, options);
+
+    $fn.func.runCallbacks('before');
   };
 
   $.extend($fn, {
@@ -13,10 +16,11 @@
       current: null,
       last: null
     },
-
     emBase:     16,
+    scopeCount: 0,
     scope:      [],
     debug:      false,
+    callbacks:  {},
     defaultOptions: {
       baseFontSize:     null,
       minFontSize:      null,
@@ -31,6 +35,9 @@
       wordWrapClass:    'textfill-word',
       letterWrapClass:  'textfill-letter',
       applyTracking:    false,
+      marginLast:       null,
+      before:    null,
+      complete:  null,
       animation: {
         resizeDuration: 0,
         fadeDuration:   0,
@@ -123,6 +130,8 @@
         } else {
           return parseFloat(value);
         }
+      } else if(typeof value == 'function'){
+        return value;
       }
     }
     return null;
@@ -143,9 +152,17 @@
     for(var i = 0, l = $scope.length; i < l; ++i){
       var s = $($scope[i]);
 
-      if(!s.attr('data-textfill')){
+      var c = s.find('[data-textfill="true"]').length;
+
+      if(c == 0){
         $fn.func.addContainerSet(s, $.extend(true, {}, options));
       }
+    }
+
+    $fn.scopeCount--;
+
+    if($fn.scopeCount == 0){
+      $fn.func.runCallbacks('complete');
     }
   };
 
@@ -156,8 +173,42 @@
   };
 
   $fn.func.screenWidthChanged = function(){
-  return true;
     return !$fn.screenWidth.last || ($fn.screenWidth.current != $fn.screenWidth.last);
+  };
+
+  $fn.func.addGlobalCallbacks = function(options){
+    var callbackKeys = [
+      'before',
+      'complete'
+    ];
+
+    for(var i = 0, l = callbackKeys.length; i < l; ++i){
+      var k = callbackKeys[i];
+      var c = options[k];
+
+      if(typeof c == 'function'){
+        $fn.callbacks[k] = c;
+        delete options[k];
+      }
+    }
+  };
+
+  $fn.func.runCallbacks = function(when){
+    if(when){
+      var f = $fn.callbacks[when];
+
+      if(typeof f == 'function'){
+        return $.proxy(f, $fn)();
+      }
+    } else {
+      for(key in $fn.callbacks){
+        var f = $fn.callbacks[key];
+        if(typeof f == 'function'){
+          return $.proxy(f, $fn)();
+        }
+      }
+    }
+    return false;
   };
 
   $fn.func.updateScreenWidth = function(){
@@ -165,9 +216,13 @@
     $fn.screenWidth.current = $(window).width();
 
     if($fn.func.screenWidthChanged()){
+      $fn.func.runCallbacks('before');
+
       for(var i = 0, l = $fn.scope.length; i < l; ++i){
         $fn.scope[i].resize();
       }
+
+      $fn.func.runCallbacks('complete');
     }
   };
 
@@ -181,10 +236,7 @@
 
     var initialOptions  = options;
     var initialContents = scope.html();
-
-    this.options = function(){
-      return options;
-    };
+    var initialOpacity  = scope.css('opacity');
 
     this.children = function(){
       return children;
@@ -196,6 +248,10 @@
       });
     };
 
+    this.get = function(){
+      return $(scope);
+    };
+
     this.getChildFontSize = function(key){
       var methods = {
         'minimum': $fn.util.arrayMin,
@@ -205,6 +261,10 @@
       };
 
       return methods[key](self.childFontSizes());
+    };
+
+    this.options = function(){
+      return options;
     };
 
     this.redraw = function(){
@@ -225,9 +285,12 @@
     };
 
     this.resize = function(){
+
       if(hasBreakpoint()){
         self.redraw();
       } else {
+        runCallbacks('before');
+
         for(var i = 0, l = children.length; i < l; ++i){
           children[i].resize();
         }
@@ -236,7 +299,10 @@
           children[i].finalize();
         }
 
-        scope.fadeTo(self.options().animation.fadeDuration, 1);
+        setBaseline();
+
+        scope.fadeTo(self.options().animation.fadeDuration, initialOpacity);
+        runCallbacks('complete');
       }
     };
 
@@ -295,6 +361,31 @@
       return -1;
     };
 
+    var runCallbacks = function(when){
+      var f = self.options()[when];
+
+      if(typeof f == 'function'){
+        return $.proxy(f, self)();
+      }
+
+      return false;
+    };
+
+    var setBaseline = function(){
+      /*
+      var b = self.options().baseline;
+
+      if(typeof b != 'undefined' && b != null){
+        var ch = $(b).height();
+        var sh = self.get().height();
+        var m  = ch - sh;
+        m = m + ($fn.emBase - (m % $fn.emBase));
+
+        self.get().css({ 'margin-top': m + 'px' });
+      }
+      */
+    };
+
     var setOptions = function(givenOptions){
       options = $.extend({}, $fn.defaultOptions, givenOptions);
 
@@ -327,12 +418,13 @@
     var lineSelector;
     var wordSelector;
     var letterSelector;
+    var resizeRatio;
 
     var leftGutter  = 0;
     var rightGutter = 0;
 
     var containerStyle = {};
-    var lineStyle = {}
+    var lineStyle      = {}
 
     var init = function(){
 
@@ -366,6 +458,22 @@
       return comparator;
     };
 
+    this.containerWidth = function(){
+      var w = self.options().comparisonWidth;
+
+      if(w){
+        if(typeof w == 'function'){
+          w = $.proxy(w, self)();
+        }
+      } else if(self.get().css('position') == 'absolute'){
+        w = self.get().parent().width();
+      } else {
+        w = self.get().width();
+      }
+
+      return w;
+    };
+
     this.letterCount = function(){
       return $.trim(self.lines().text()).length;
     };
@@ -389,22 +497,19 @@
 
     this.finalize = function(){
       setConformedFontSize();
-      setTracking();
       setLineHeight();
+      setMargin();
 
-      self.lines().animate(lineStyle,
-        self.options().animation.resizeDuration,
-        self.options().animation.easing
-      );
-      self.get().animate(containerStyle,
-        self.options().animation.resizeDuration,
-        self.options().animation.easing
-      );
+      animate(self.lines(), lineStyle);
+      animate(self.get(), containerStyle);
+
+      setTracking();
+
       destroyComparator();
     };
 
     this.resetValues = function(){
-      lineStyle = {};
+      lineStyle      = {};
       containerStyle = {};
 
       self.calculatedFontSize = null;
@@ -415,31 +520,108 @@
       self.get().attr('data-textfill', 'true');
     };
 
+    var animate = function($el, styleObj){
+      $el.animate(styleObj,
+        self.options().animation.resizeDuration,
+        self.options().animation.easing
+      );
+    };
+
+    var getFontSizeOption = function(key){
+      var value = self.options()[key + 'FontSize'];
+
+      if(typeof value == 'function'){
+        value = $.proxy(value, self)();
+        return value;
+      }
+
+      return value;
+    };
+
+    var getSiblingFontSize = function(opt){
+      var f = self.parent().getChildFontSize;
+      var value;
+
+      switch(opt){
+        case 'minimum':
+        case 'min':
+          value = f('minimum');
+          break;
+        case 'maximum':
+        case 'max':
+          value = f('maximum');
+          break;
+        case 'median':
+          value = f('median');
+          break;
+        case 'mean':
+        case 'average':
+          value = f('mean'); 
+          break;
+        default:
+          value = false;
+      }
+
+      return value;
+    };
+
+    var getTextWrapper = function(className){
+      var className = className || self.options().lineWrapClass;
+      var el = $('<' + self.options().textWrapElement + '/>').addClass(className);
+
+      if($fn.debug){
+        el.attr('id', $fn.util.guid());
+      }
+
+      return el;
+    };
+
+    var parseConformOpt = function(optName){
+      var opt = self.options()[optName];
+
+      if(typeof opt == 'object' && opt != null){
+        var fontSize = getSiblingFontSize(opt.conformTo);
+
+        if(!fontSize){
+          $fn.logger.warn('Invalid option: {a}.{b}', { a: optName, b: opt.conformTo });
+        }
+
+        return fontSize;
+      } else if(typeof opt == 'undefined'){
+        return false;
+      } else {
+        return opt;
+      }
+    };
+
     var setBaseFontSize = function(){
       self.baseFontSize = $fn.util.parseSize(self.options().baseFontSize) || $fn.emBase;
     };
 
-    var setWhiteSpace = function(){
-      self.get().css('white-space', 'nowrap');
-    };
-
     var setFontSize = function(){
-      var opts   = self.options();
-      var cw     = self.get().width();
-      var tw     = self.comparator().width();
-      var ratio  = cw / tw;
+      var opts  = self.options();
+      var cw    = self.containerWidth();
+      var tw    = self.comparator().width();
+      var ratio = resizeRatio = cw / tw;
+
+      var max = getFontSizeOption('max');
+      var min = getFontSizeOption('min');
+      var ef;
 
       self.calculatedFontSize = self.baseFontSize * ratio;
 
-      if(opts.maxFontSize && (self.calculatedFontSize > opts.maxFontSize)){
-        self.effectiveFontSize = opts.maxFontSize;
+      if(max && (self.calculatedFontSize > max)){
+        ef = max;
       }
 
-      if(self.calculatedFontSize < opts.minFontSize){
-        self.effectiveFontSize = opts.minFontSize;
+      if(self.calculatedFontSize < min){
+        ef = min
       }
 
-      self.effectiveFontSize = self.effectiveFontSize || self.calculatedFontSize;
+      ef = ef || self.calculatedFontSize;
+      ef = Math.round(ef);
+      self.effectiveFontSize = ef;
+
       lineStyle['font-size'] = self.effectiveFontSize;
     };
 
@@ -474,66 +656,42 @@
       }
     };
 
-    var getSiblingFontSize = function(opt){
-      var f = self.parent().getChildFontSize;
-      var value;
-
-      switch(opt){
-        case 'minimum':
-        case 'min':
-          value = f('minimum') + 'px';
-          break;
-        case 'maximum':
-        case 'max':
-          value = f('maximum') + 'px';
-          break;
-        case 'median':
-          value = f('median') + 'px';
-          break;
-        case 'mean':
-        case 'average':
-          value = f('mean') + 'px';
-          break;
-        default:
-          value = false;
-      }
-
-      return value;
-    };
-
-    var parseConformOpt = function(optName){
-      var opt = self.options()[optName];
-
-      if(typeof opt == 'object' && opt != null){
-        var fontSize = getSiblingFontSize(opt.conformTo);
-
-        if(!fontSize){
-          $fn.logger.warn('Invalid option: {a}.{b}', { a: optName, b: opt.conformTo });
-        }
-
-        return fontSize;
-      } else if(typeof opt == 'undefined'){
-        return false;
-      } else {
-        return opt;
-      }
-    };
-
     var setConformedFontSize = function(){
-      var fontSize = parseConformOpt('fontSize');
+      self.conformedFontSize = parseConformOpt('fontSize');
 
-      if(fontSize){
-        lineStyle['font-size'] = fontSize;
+      if(self.conformedFontSize){
+        lineStyle['font-size'] = self.conformedFontSize;
       }
     };
 
     var setLineHeight = function(){
       var lineHeight = parseConformOpt('lineHeight');
+      var fs         = self.conformedFontSize || self.effectiveFontSize;
 
-      if(lineHeight){
-        lineStyle['line-height'] = lineHeight;
-        containerStyle['min-height'] = lineHeight;
+      if(typeof lineHeight == 'undefined' || lineHeight == null){
+        var lh = fs * 0.8;
+        lh = lh + ($fn.emBase - (lh % $fn.emBase));
+        lineHeight = lh;
       }
+
+      lineStyle['line-height'] = lineHeight;
+    };
+
+    var setMargin = function(){
+      var m = self.options().margin;
+
+      if(typeof m == 'undefined' || m == null){
+        m = $fn.emBase * 2;
+      }
+
+      if(self.isLastChild()){
+        var ml = self.options().marginLast;
+        if(typeof ml != 'undefined' && ml != null){
+          m = ml;
+        }
+      }
+
+      containerStyle['margin-bottom'] = m;
     };
 
     var setTracking = function(){
@@ -541,36 +699,36 @@
         return false;
       }
 
-      var cw = self.get().width();
-      var mw = self.comparator().width();
-      var tl = self.letterCount();
-      var bs = self.baseFontSize;
-      var fs = self.effectiveFontSize;
-      var diff = cw - mw;
+      if(self.get().width() <= self.lines().width()){
+        return false;
+      }
 
-      var px, em;
-
-      px = diff / (tl - 1);
-      em = $fn.util.pxToEm(px, fs).toString() + 'em';
-
+      var px       = self.get().width() / (self.letterCount() - 1);
       var elements = self.get().find(letterSelector);
 
       for(var i = 0, l = elements.length; i < l; ++i){
-        if(i != elements.length - 1){
-          $(elements[i]).css('padding-right', em);
+        var $e = $(elements[i]);
+        if($e.text() == ' '){
+          continue;
         }
+
+        var s  = px - $e.width();
+        var styleObj = {};
+
+        if(i == 0){
+          styleObj['padding-right'] = (s / 2) + 'px';
+        } else if(i == elements.length - 1){
+        } else {
+          styleObj['padding-right'] = (s / 2) + 'px';
+          styleObj['padding-left'] = (s / 2) + 'px';
+        }
+
+        $e.css(styleObj);
       }
     };
 
-    var getTextWrapper = function(className){
-      var className = className || self.options().lineWrapClass;
-      var el = $('<' + self.options().textWrapElement + '/>').addClass(className);
-
-      if($fn.debug){
-        el.attr('id', $fn.util.guid());
-      }
-
-      return el;
+    var setWhiteSpace = function(){
+      self.get().css('white-space', 'nowrap');
     };
 
     var wrapLetters = function($target){
@@ -603,13 +761,15 @@
 
     var wrapLines = function(){
       var html = $.trim(self.get().html());
-        lines = getTextWrapper();
-        lines.html(html);
-        self.get().html(lines);
+      lines = getTextWrapper();
+      lines.html(html);
 
       if(self.options().applyTracking){
-        self.get().html(wrapLetters(self.get()));
+        lines.html(wrapLetters(self.get()));
       }
+
+      self.get().html(lines);
+
     };
 
     var createComparator = function(){
@@ -619,8 +779,10 @@
       comparator.hide().text(innerText).
         removeClass().
         addClass('textfill-comparator').
-        css('font-size', self.baseFontSize).
-        appendTo(self.get());
+        css({
+          'font-size': self.baseFontSize,
+          'position': 'static'
+        }).appendTo(self.get());
     };
 
     var destroyComparator = function(){
@@ -635,6 +797,8 @@
   });
 
   $.fn.textfill = function(options){
+    $.textfill.scopeCount++;
+
     var start = function(evt){
       $fn.func.addScope($(evt.data.selector), evt.data.options);
     };

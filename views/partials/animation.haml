@@ -1,0 +1,48 @@
+.row
+  .small-4.columns.animation-controls
+    .row
+      .small-3.columns
+        %label Step Speed
+        %input{ :type => 'text', :id => 'animation-speed', :value => 0 }
+      .small-3.columns
+        %label From
+        %input{ :type => 'text', :id => 'animation-from', :value => 0 }
+    .row
+      .small-12.columns
+        %button.prev &lt;
+        %button.play play
+        %button.pause pause
+        %button.restart restart
+        %button.next &gt;
+  .small-8.columns.animation-log
+    .row
+      .small-12.columns
+        %table
+          %tr
+            %td.title Index
+            %td.index
+          %tr
+            %td.title Interval
+            %td.interval
+          %tr
+            %td.title Step
+            %td.step
+          %tr
+            %td.title Lat
+            %td.lat
+          %tr
+            %td.title Lng
+            %td.lng
+          %tr
+            %td.title Heading
+            %td.heading
+          %tr
+            %td.title Pitch
+            %td.pitch
+          %tr
+            %td.title Zoom
+            %td.zoom
+          %tr
+            %td.get-xml{ :colspan => 2 }
+              %button get xml
+              %textarea

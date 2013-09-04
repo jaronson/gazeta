@@ -44,9 +44,8 @@ $portrait:      "only screen and (orientation: portrait)";
 $font-family-futura:       "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 $font-family-trade-gothic: 'Trade Gothic Web', 'Helvetica Neue', 'Helvetica', sans-serif;
 $font-family-century:      'Century Expanded Web', 'Georgia', 'Times', serif;
-$font-family-neutraface:   'Neutraface Condensed Web', 'Futura LT Web', 'Helvetica Neue', 'Helvetica', sans-serif;
-
-$font-family-aktuelle: 'Aktuelle Web';
+$font-family-neutraface:   'Neutraface Condensed Web';
+$font-family-hermes:       'Hermes Web';
 
 // Change whether or not you include browser prefixes
 // $experimental: true;
@@ -57,13 +56,13 @@ $default-float: left;
 
 $body-bg: $color-light;
 $body-font-color: $color-dark;
-$body-font-family: $font-family-trade-gothic;
+$body-font-family: $font-family-futura;
 $body-font-weight: 200;
 $body-font-style: normal;
 
 // Font-smoothing
 
-// $font-smoothing: antialiased;
+$font-smoothing: antialiased;
 
 // Text direction settings
 
@@ -209,7 +208,7 @@ $code-font-weight: normal;
 // Anchors
 
 $anchor-text-decoration: none;
-$anchor-font-color: $color-teal;
+$anchor-font-color: darken($color-blue, 20%);
 $anchor-font-color-hover: darken($color-teal, 5%);
 
 // <hr> element

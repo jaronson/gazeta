@@ -1,0 +1,14 @@
+@media #{ $small }{
+}
+
+@media #{ $small }{
+  p {
+    font-size: 1.2em;
+  }
+
+  #intro {
+    .hide-for-small {
+      margin-top: 2em;
+    }
+  }
+}

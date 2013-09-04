@@ -1,20 +1,247 @@
 @import "colors";
 @import "responsivity";
 @import "responsivity/fonts/futuralt";
-@import "responsivity/fonts/tradegothic";
 @import "responsivity/fonts/century_expanded_bt";
+@import "responsivity/fonts/hermes";
+@import "responsivity/fonts/bello_script";
+//@import "responsivity/fonts/century751";
+@import "responsivity/fonts/tradegothic";
+@import "responsivity/fonts/neutraface_condensed";
+@import "responsivity/fonts/prisma";
+//@import url(http://fonts.googleapis.com/css?family=Cookie);
 
-h1, h2, h3, h4, h5, h6, p{
-  margin: 0;
+$tag-colors:
+  art $color-green,
+  essay $color-pink,
+  music $color-yellow,
+  ephemera $color-blue
+  ;
+
+@function tag-color($name){
+  @each $item in $tag-colors {
+    $n: nth($item, 1);
+    $c: nth($item, 2);
+
+    @if $name == $n {
+      @return $c;
+    }
+  }
+
+  @return $color-medium;
+};
+
+@mixin tag($name){
+  &.#{ $name }{
+    background-color: tag-color($name);
+  }
+};
+
+.font-futura  { font-family: $font-family-futura; }
+.font-cookie  { font-family: 'Cookie'; }
+.font-century { font-family: $font-family-century; }
+.font-hermes  { font-family: $font-family-hermes; }
+.font-neutraface { font-family: $font-family-neutraface; }
+
+$header-size: 2em;
+
+header {
+  z-index: 100;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: $header-size;
+  text-align: right;
+  overflow: hidden;
+  @extend .clearfix;
+
+  ul.tags {
+    margin: 0;
+    padding: 0;
+    float: right;
+
+    li {
+      display: block;
+      float: left;
+
+      a {
+        display: block;
+        height: $header-size;
+        width: 1.5em;
+        padding: 1em 0;
+        line-height: 1em;
+        text-indent: 100%;
+        overflow: hidden;
+        color: $color-dark;
+        text-transform: uppercase;
+
+        &:hover {
+          color: $color-darkest;
+        }
+      }
+
+      &.active {
+        a {
+          width: auto;
+          text-indent: 0;
+          overflow: visible;
+          padding: 1em;
+        }
+      }
+    }
+  }
+
+  .wordmark {
+    float: right;
+    background-color: $color-dark;
+    margin: 0;
+    padding: 0.5em 1em;
+
+    img {
+      display: inline;
+      width: 8em;
+    }
+  }
+
+  .current {
+    padding: 1em;
+    line-height: 1em;
+    float: left;
+    text-transform: uppercase;
+
+    strong {
+      font-weight: 400
+    }
+  }
 }
 
-h1 {
+figure {
+  padding: 1em;
+  background-color: $color-neutral;
+
+  figcaption {
+    margin-top: 0.5em;
+    margin-bottom: 1.25em;
+    number, work {
+      font-weight: 400;
+    }
+
+    tag {
+      float: right;
+    }
+  }
 }
 
-h2 {
+tag {
+  display: block;
+  height: 1em;
+  width: 1em;
+  background-color: $color-medium;
+  position: relative;
+
+  @include tag(art);
+  @include tag(ephemera);
+  @include tag(essay);
+  @include tag(music);
+}
+
+byline {
+  text-transform: uppercase;
+
+  date {
+    display: block;
+    float: right;
+    margin-right: 1em;
+  }
+
+  tag {
+    float: right;
+  }
+}
+
+worktitle {
+  font-weight: 400;
+}
+
+lyrics {
   font-family: $font-family-century;
+  display: block;
+
+  worktitle {
+    display: block;
+    @extend p.lead;
+    margin-bottom: 1.6em;
+  }
+
+  p tag {
+    display: inline-block;
+    top: 0.125em;
+  }
 }
 
-.textfill {
-  @include opacity(0);
+separator {
+  display: block;
+  width: 100%;
+  position: relative;
+  margin-top: $header-size;
+  height: $header-size;
+  color: $color-medium;
+  @extend .clearfix;
+
+  &:before {
+    content: ' ';
+    width: 100%;
+    height: 1em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    border-bottom: 1px solid $color-medium;
+  }
+
+  date {
+    display: block;
+    line-height: 1em;
+    padding: 0 $column-gutter / 2;
+    padding-top: 0.5em;
+    position: relative;
+    z-index: 2;
+    background-color: $color-light;
+    float: left;
+  }
+}
+
+.category-indicator {
+  height: 1em;
+  width: 100%;
+}
+
+.yt-player {
+  margin: 0 auto;
+  height: 400px;
+  width: 100%;
+}
+
+.section {
+  padding-top: $header-size;
+  padding-bottom: $header-size * 1.25;
+}
+
+.section.mfm {
+  background-color: rgba(42,24,7,1);
+  color: $color-light;
+
+  h1 {
+    text-transform: uppercase;
+    color: lighten($color-brown-pale-warm, 20%);
+    font-weight: 400;
+    font-family: 'Prisma Web';
+  }
+
+  h3 {
+    font-weight: 200;
+    font-family: $font-family-futura;
+    color: $color-light;
+  }
 }
