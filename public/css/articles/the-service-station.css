@@ -7109,31 +7109,53 @@ a.th {
 }
 
 /* line 39, ../../../sass/styles.scss */
+.clearfix:after, header:after, separator:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* line 48, ../../../sass/styles.scss */
+* html .clearfix, * html header, * html separator {
+  zoom: 1;
+}
+
+/* IE6 */
+/* line 49, ../../../sass/styles.scss */
+*:first-child + html .clearfix, *:first-child + html header, *:first-child + html separator {
+  zoom: 1;
+}
+
+/* IE7 */
+/* line 51, ../../../sass/styles.scss */
 .font-futura {
   font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 }
 
-/* line 40, ../../../sass/styles.scss */
+/* line 52, ../../../sass/styles.scss */
 .font-cookie {
   font-family: 'Cookie';
 }
 
-/* line 41, ../../../sass/styles.scss */
+/* line 53, ../../../sass/styles.scss */
 .font-century {
   font-family: "Century Expanded Web", "Georgia", "Times", serif;
 }
 
-/* line 42, ../../../sass/styles.scss */
+/* line 54, ../../../sass/styles.scss */
 .font-hermes {
   font-family: "Hermes Web";
 }
 
-/* line 43, ../../../sass/styles.scss */
+/* line 55, ../../../sass/styles.scss */
 .font-neutraface {
   font-family: "Neutraface Condensed Web";
 }
 
-/* line 47, ../../../sass/styles.scss */
+/* line 59, ../../../sass/styles.scss */
 header {
   z-index: 100;
   display: block;
@@ -7145,18 +7167,18 @@ header {
   text-align: right;
   overflow: hidden;
 }
-/* line 59, ../../../sass/styles.scss */
+/* line 71, ../../../sass/styles.scss */
 header ul.tags {
   margin: 0;
   padding: 0;
   float: right;
 }
-/* line 64, ../../../sass/styles.scss */
+/* line 76, ../../../sass/styles.scss */
 header ul.tags li {
   display: block;
   float: left;
 }
-/* line 68, ../../../sass/styles.scss */
+/* line 80, ../../../sass/styles.scss */
 header ul.tags li a {
   display: block;
   height: 2em;
@@ -7168,61 +7190,61 @@ header ul.tags li a {
   color: #2f2b23;
   text-transform: uppercase;
 }
-/* line 79, ../../../sass/styles.scss */
+/* line 91, ../../../sass/styles.scss */
 header ul.tags li a:hover {
   color: black;
 }
-/* line 85, ../../../sass/styles.scss */
+/* line 97, ../../../sass/styles.scss */
 header ul.tags li.active a {
   width: auto;
   text-indent: 0;
   overflow: visible;
   padding: 1em;
 }
-/* line 95, ../../../sass/styles.scss */
+/* line 107, ../../../sass/styles.scss */
 header .wordmark {
   float: right;
   background-color: #2f2b23;
   margin: 0;
   padding: 0.5em 1em;
 }
-/* line 101, ../../../sass/styles.scss */
+/* line 113, ../../../sass/styles.scss */
 header .wordmark img {
   display: inline;
   width: 8em;
 }
-/* line 107, ../../../sass/styles.scss */
+/* line 119, ../../../sass/styles.scss */
 header .current {
   padding: 1em;
   line-height: 1em;
   float: left;
   text-transform: uppercase;
 }
-/* line 113, ../../../sass/styles.scss */
+/* line 125, ../../../sass/styles.scss */
 header .current strong {
   font-weight: 400;
 }
 
-/* line 119, ../../../sass/styles.scss */
+/* line 131, ../../../sass/styles.scss */
 figure {
   padding: 1em;
   background-color: #f6f5f4;
 }
-/* line 123, ../../../sass/styles.scss */
+/* line 135, ../../../sass/styles.scss */
 figure figcaption {
   margin-top: 0.5em;
   margin-bottom: 1.25em;
 }
-/* line 126, ../../../sass/styles.scss */
+/* line 138, ../../../sass/styles.scss */
 figure figcaption number, figure figcaption work {
   font-weight: 400;
 }
-/* line 130, ../../../sass/styles.scss */
+/* line 142, ../../../sass/styles.scss */
 figure figcaption tag {
   float: right;
 }
 
-/* line 136, ../../../sass/styles.scss */
+/* line 148, ../../../sass/styles.scss */
 tag {
   display: block;
   height: 1em;
@@ -7247,43 +7269,43 @@ tag.music {
   background-color: #fdd846;
 }
 
-/* line 149, ../../../sass/styles.scss */
+/* line 161, ../../../sass/styles.scss */
 byline {
   text-transform: uppercase;
 }
-/* line 152, ../../../sass/styles.scss */
+/* line 164, ../../../sass/styles.scss */
 byline date {
   display: block;
   float: right;
   margin-right: 1em;
 }
-/* line 158, ../../../sass/styles.scss */
+/* line 170, ../../../sass/styles.scss */
 byline tag {
   float: right;
 }
 
-/* line 163, ../../../sass/styles.scss */
+/* line 175, ../../../sass/styles.scss */
 worktitle {
   font-weight: 400;
 }
 
-/* line 167, ../../../sass/styles.scss */
+/* line 179, ../../../sass/styles.scss */
 lyrics {
   font-family: "Century Expanded Web", "Georgia", "Times", serif;
   display: block;
 }
-/* line 171, ../../../sass/styles.scss */
+/* line 183, ../../../sass/styles.scss */
 lyrics worktitle {
   display: block;
   margin-bottom: 1.6em;
 }
-/* line 177, ../../../sass/styles.scss */
+/* line 189, ../../../sass/styles.scss */
 lyrics p tag {
   display: inline-block;
   top: 0.125em;
 }
 
-/* line 183, ../../../sass/styles.scss */
+/* line 195, ../../../sass/styles.scss */
 separator {
   display: block;
   width: 100%;
@@ -7292,7 +7314,7 @@ separator {
   height: 2em;
   color: #b5ad9c;
 }
-/* line 192, ../../../sass/styles.scss */
+/* line 204, ../../../sass/styles.scss */
 separator:before {
   content: ' ';
   width: 100%;
@@ -7303,7 +7325,7 @@ separator:before {
   z-index: 1;
   border-bottom: 1px solid #b5ad9c;
 }
-/* line 203, ../../../sass/styles.scss */
+/* line 215, ../../../sass/styles.scss */
 separator date {
   display: block;
   line-height: 1em;
@@ -7315,38 +7337,38 @@ separator date {
   float: left;
 }
 
-/* line 215, ../../../sass/styles.scss */
+/* line 227, ../../../sass/styles.scss */
 .category-indicator {
   height: 1em;
   width: 100%;
 }
 
-/* line 220, ../../../sass/styles.scss */
+/* line 232, ../../../sass/styles.scss */
 .yt-player {
   margin: 0 auto;
   height: 400px;
   width: 100%;
 }
 
-/* line 226, ../../../sass/styles.scss */
+/* line 238, ../../../sass/styles.scss */
 .section {
   padding-top: 2em;
   padding-bottom: 2.5em;
 }
 
-/* line 231, ../../../sass/styles.scss */
+/* line 243, ../../../sass/styles.scss */
 .section.mfm {
   background-color: #2a1807;
   color: white;
 }
-/* line 235, ../../../sass/styles.scss */
+/* line 247, ../../../sass/styles.scss */
 .section.mfm h1 {
   text-transform: uppercase;
   color: #e3ceb6;
   font-weight: 400;
   font-family: 'Prisma Web';
 }
-/* line 242, ../../../sass/styles.scss */
+/* line 254, ../../../sass/styles.scss */
 .section.mfm h3 {
   font-weight: 200;
   font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;

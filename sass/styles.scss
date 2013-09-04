@@ -36,6 +36,18 @@ $tag-colors:
   }
 };
 
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
 .font-futura  { font-family: $font-family-futura; }
 .font-cookie  { font-family: 'Cookie'; }
 .font-century { font-family: $font-family-century; }
