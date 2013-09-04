@@ -1,14 +1,39 @@
-$(document).ready(function(){
-  $('.yt-player').ytplayer();
+require.config({
+  baseUrl: 'js/libs',
+  paths: {
+    jquery:   'jquery.min',
+    swfobject: 'swfobject'
+  },
+  shim: {
+    'jquery.textfill': [ 'jquery' ],
+    'ytplayer': [ 'jquery' ]
+  }
+});
 
-  $('.intro h1').textfill({});
+require([
+  'jquery',
+  'jquery.textfill',
+  'ytplayer',
+  'swfobject'
+], function($, textfill, ytplayer, swfobject){
+  $(document).ready(function(){
+    $('.yt-player').ytplayer();
 
-  $('header ul.tags li a').click(function(){
-    $('header ul.tags li').removeClass('active');
-    $(this).parent().addClass('active');
-  });
+    $.textfill({
+      animation: {
+        fadeDuration: 150
+      }
+    });
 
-  $(window).scroll(function(){
-    $('header').css('top', $(window).scrollTop());
+    $('.textfill').textfill({});
+
+    $('header ul.tags li a').click(function(){
+      $('header ul.tags li').removeClass('active');
+      $(this).parent().addClass('active');
+    });
+
+    $(window).scroll(function(){
+      $('header').css('top', $(window).scrollTop());
+    });
   });
 });

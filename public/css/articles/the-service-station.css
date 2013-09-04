@@ -7351,24 +7351,30 @@ separator date {
 }
 
 /* line 238, ../../../sass/styles.scss */
+.textfill {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+
+/* line 242, ../../../sass/styles.scss */
 .section {
   padding-top: 2em;
   padding-bottom: 2.5em;
 }
 
-/* line 243, ../../../sass/styles.scss */
+/* line 247, ../../../sass/styles.scss */
 .section.mfm {
   background-color: #2a1807;
   color: white;
 }
-/* line 247, ../../../sass/styles.scss */
+/* line 251, ../../../sass/styles.scss */
 .section.mfm h1 {
   text-transform: uppercase;
   color: #e3ceb6;
   font-weight: 400;
   font-family: 'Prisma Web';
 }
-/* line 254, ../../../sass/styles.scss */
+/* line 258, ../../../sass/styles.scss */
 .section.mfm h3 {
   font-weight: 200;
   font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;

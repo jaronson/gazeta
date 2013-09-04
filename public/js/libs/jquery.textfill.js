@@ -219,7 +219,7 @@
       $fn.func.runCallbacks('before');
 
       for(var i = 0, l = $fn.scope.length; i < l; ++i){
-        $fn.scope[i].resize();
+        $fn.scope[i].redraw();
       }
 
       $fn.func.runCallbacks('complete');
@@ -285,7 +285,6 @@
     };
 
     this.resize = function(){
-
       if(hasBreakpoint()){
         self.redraw();
       } else {
@@ -301,7 +300,9 @@
 
         setBaseline();
 
-        scope.fadeTo(self.options().animation.fadeDuration, initialOpacity);
+        var op = initialOpacity == 0 ? 1 : op;
+
+        scope.fadeTo(self.options().animation.fadeDuration, op);
         runCallbacks('complete');
       }
     };
@@ -792,7 +793,7 @@
     init();
   };
 
-  $(document).ready(function(){
+  $(window).load(function(){
     $fn.init();
   });
 

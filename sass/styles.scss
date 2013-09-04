@@ -235,6 +235,10 @@ separator {
   width: 100%;
 }
 
+.textfill {
+  @include opacity(0);
+}
+
 .section {
   padding-top: $header-size;
   padding-bottom: $header-size * 1.25;
