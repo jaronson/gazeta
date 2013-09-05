@@ -793,17 +793,9 @@
     init();
   };
 
-  $(window).load(function(){
-    $fn.init();
-  });
-
   $.fn.textfill = function(options){
+    $fn.init();
     $.textfill.scopeCount++;
-
-    var start = function(evt){
-      $fn.func.addScope($(evt.data.selector), evt.data.options);
-    };
-
-    $(window).load({ selector: this.selector, options: options }, start);
+    $fn.func.addScope($(this.selector), options);
   };
 })(jQuery, this, this.document);

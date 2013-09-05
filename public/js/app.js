@@ -1,23 +1,13 @@
-require.config({
-  baseUrl: 'js/libs',
-  paths: {
-    jquery:   'jquery.min',
-    swfobject: 'swfobject'
-  },
-  shim: {
-    'jquery.textfill': [ 'jquery' ],
-    'ytplayer': [ 'jquery' ]
-  }
-});
-
 require([
   'jquery',
   'jquery.textfill',
   'ytplayer',
-  'swfobject'
-], function($, textfill, ytplayer, swfobject){
+  'swfobject',
+], function($){
   $(document).ready(function(){
-    $('.yt-player').ytplayer();
+    var repositionHeader = function(){
+      $('header').css('top', $(window).scrollTop());
+    };
 
     $.textfill({
       animation: {
@@ -26,14 +16,14 @@ require([
     });
 
     $('.textfill').textfill({});
+    $('.chap').textfill({});
 
-    $('header ul.tags li a').click(function(){
-      $('header ul.tags li').removeClass('active');
-      $(this).parent().addClass('active');
-    });
+    $('.yt-player').ytplayer();
 
     $(window).scroll(function(){
-      $('header').css('top', $(window).scrollTop());
+      repositionHeader();
     });
+
+    repositionHeader();
   });
 });

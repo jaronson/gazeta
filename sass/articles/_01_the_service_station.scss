@@ -1,16 +1,12 @@
-@import "styles";
-@import 'media';
+/*! article: the-service-station.css */
 
 .video-wrap {
   height: 200px;
   background-color: $color-dark;
 }
 
-.section {
+.section.service-intro {
   font-family: $font-family-century;
-}
-
-.section#intro {
   min-height: 900px;
   background-color: $color-dark;
   color: $color-brown-pale-warm;

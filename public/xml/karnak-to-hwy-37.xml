@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <markers>
   <line>
-    <point index="" lat='37.291260' lng='-88.862880' fade="0.1" pitch="-25" heading="-70" interval="200"/>
+    <point index="" lat='37.291260' lng='-88.862880' fade="0.1" pitch="-25" heading="-70" interval="1200"/>
     <point index="" lat='37.291230' lng='-88.864580' />
     <point index="" lat='37.291220' lng='-88.865100' />
     <point index="" lat='37.291210' lng='-88.865550' />
     <point index="" lat='37.291170' lng='-88.867710' />
     <point index="" lat='37.291140' lng='-88.869200' />
     <point index="" lat='37.291140' lng='-88.869410' />
-    <point index="" lat='37.291120' lng='-88.870360' fade="0.5"/>
+    <point index="" lat='37.291120' lng='-88.870360' fade="0.8"/>
     <point index="" lat='37.291060' lng='-88.873030' />
     <point index="" lat='37.291030' lng='-88.874810' />
     <point index="" lat='37.291030' lng='-88.875030' />
@@ -38,7 +38,7 @@
     <point index="" lat='37.291830' lng='-88.888170' />
     <point index="" lat='37.291850' lng='-88.888320' />
     <point index="" lat='37.291860' lng='-88.888470' />
-    <point index="" lat='37.291870' lng='-88.888680' fade="0.6" />
+    <point index="" lat='37.291870' lng='-88.888680' fade="0.75" />
     <point index="" lat='37.291880' lng='-88.888800' />
     <point index="" lat='37.291880' lng='-88.888920' />
     <point index="" lat='37.291880' lng='-88.889130' />
@@ -48,7 +48,7 @@
     <point index="" lat='37.291840' lng='-88.889980' />
     <point index="" lat='37.291810' lng='-88.890280' />
     <point index="" lat='37.291770' lng='-88.890560' />
-    <point index="" lat='37.291760' lng='-88.890680' fade="0.5"/>
+    <point index="" lat='37.291760' lng='-88.890680' fade="0.8"/>
     <point index="" lat='37.291710' lng='-88.890920' />
     <point index="" lat='37.291660' lng='-88.891180' />
     <point index="" lat='37.291620' lng='-88.891340' />
@@ -74,7 +74,7 @@
     <point index="" lat='37.289270' lng='-88.896980' />
     <point index="" lat='37.289200' lng='-88.897280' />
     <point index="" lat='37.289140' lng='-88.897630' />
-    <point index="" lat='37.289120' lng='-88.897800' fade="0.4"/>
+    <point index="" lat='37.289120' lng='-88.897800' fade="0.85"/>
     <point index="" lat='37.289070' lng='-88.898240' />
     <point index="" lat='37.289050' lng='-88.898600' />
     <point index="" lat='37.289050' lng='-88.898770' />
@@ -197,7 +197,7 @@
     <point index="" lat='37.293280' lng='-88.985830' />
     <point index="" lat='37.293080' lng='-88.986300' />
     <point index="" lat='37.291940' lng='-88.988920' />
-    <point index="" lat='37.291710' lng='-88.989430' interval="250"/>
+    <point index="" lat='37.291710' lng='-88.989430' />
     <point index="" lat='37.289470' lng='-88.994740' />
     <point index="" lat='37.289340' lng='-88.995060' />
     <point index="" lat='37.289320' lng='-88.995120' />
@@ -210,12 +210,12 @@
     <point index="" lat='37.288400' lng='-88.997660' />
     <point index="" lat='37.288330' lng='-88.998010' />
     <point index="" lat='37.288280' lng='-88.998360' />
-    <point index="" lat='37.288260' lng='-88.998530' interval="300"/>
+    <point index="" lat='37.288260' lng='-88.998530' />
     <point index="" lat='37.288230' lng='-88.998880' />
     <point index="" lat='37.288200' lng='-88.999240' />
     <point index="" lat='37.288040' lng='-89.003590' />
     <point index="" lat='37.288030' lng='-89.003810' />
-    <point index="" lat='37.287980' lng='-89.004860' interval="330"/>
+    <point index="" lat='37.287980' lng='-89.004860' />
     <point index="" lat='37.287630' lng='-89.013070' />
     <point index="" lat='37.287620' lng='-89.013300' />
     <point index="" lat='37.287610' lng='-89.013600' />
@@ -235,14 +235,14 @@
     <point index="" lat="37.287304" lng="-89.02053599999999" />
     <point index="" lat="37.287292" lng="-89.02079600000002" />
     <point index="" lat="37.287281" lng="-89.02104600000001" />
-    <point index="" lat="37.287276" lng="-89.021164" fade="0.4"/>
-    <point index="" lat="37.287266" lng="-89.021389" fade="0.3"/>
+    <point index="" lat="37.287276" lng="-89.021164" fade="0.8"/>
+    <point index="" lat="37.287266" lng="-89.021389" fade="0.9"/>
     <point index="" lat="37.287257" lng="-89.02160200000003" />
     <point index="" lat="37.28725" lng="-89.021749" />
     <point index="" lat="37.287245" lng="-89.02188000000001" />
     <point index="" lat="37.287239" lng="-89.02201200000002" />
     <point index="" lat="37.287204" lng="-89.02233999999999" />
-    <point index="" lat="37.287204" lng="-89.02223500000002" heading="-150"/>
+    <point index="" lat="37.287204" lng="-89.02223500000002" heading="-150" interval="300"/>
     <!--
     <point index="" lat="37.28708" lng="-89.02234299999998" />
     <point index="" lat="37.286893" lng="-89.02234699999997" />

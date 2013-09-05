@@ -1,14 +1,6 @@
 @import "colors";
 @import "responsivity";
-@import "responsivity/fonts/futuralt";
-@import "responsivity/fonts/century_expanded_bt";
-@import "responsivity/fonts/hermes";
-@import "responsivity/fonts/bello_script";
-//@import "responsivity/fonts/century751";
-@import "responsivity/fonts/tradegothic";
-@import "responsivity/fonts/neutraface_condensed";
-@import "responsivity/fonts/prisma";
-//@import url(http://fonts.googleapis.com/css?family=Cookie);
+@import "fonts";
 
 $tag-colors:
   art $color-green,
@@ -68,7 +60,7 @@ header {
   overflow: hidden;
   @extend .clearfix;
 
-  ul.tags {
+  ul{
     margin: 0;
     padding: 0;
     float: right;
@@ -80,10 +72,7 @@ header {
       a {
         display: block;
         height: $header-size;
-        width: 1.5em;
-        padding: 1em 0;
         line-height: 1em;
-        text-indent: 100%;
         overflow: hidden;
         color: $color-dark;
         text-transform: uppercase;
@@ -104,15 +93,42 @@ header {
     }
   }
 
+  ul.tags {
+    li a {
+      text-indent: 100%;
+      width: 1.5em;
+      padding: 1em 0;
+    }
+  }
+
+  ul.links {
+    li a {
+      width: 2em;
+      text-align: center;
+
+      img {
+        display: inline;
+        width: 1em;
+        line-height: 1em;
+      }
+    }
+  }
+
+  .right {
+    @extend .clearfix;
+    padding: 0.33em;
+    padding-right: $column-gutter / 2;
+    background-color: $color-dark;
+  }
+
   .wordmark {
     float: right;
-    background-color: $color-dark;
     margin: 0;
-    padding: 0.5em 1em;
 
     img {
       display: inline;
       width: 8em;
+      line-height: 1em;
     }
   }
 
@@ -187,7 +203,8 @@ lyrics {
   }
 
   p tag {
-    display: inline-block;
+    display: block;
+    float: right;
     top: 0.125em;
   }
 }
@@ -221,6 +238,14 @@ separator {
     z-index: 2;
     background-color: $color-light;
     float: left;
+
+    &.center {
+      float: none;
+      text-align: center;
+      &:before {
+        @extend separator:before;
+      }
+    }
   }
 }
 
@@ -242,6 +267,7 @@ separator {
 .section {
   padding-top: $header-size;
   padding-bottom: $header-size * 1.25;
+  position: relative;
 }
 
 .section.mfm {
@@ -261,3 +287,7 @@ separator {
     color: $color-light;
   }
 }
+
+/*! articles start */
+@import "articles/*";
+/*! articles end */
