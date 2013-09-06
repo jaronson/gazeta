@@ -1386,12 +1386,12 @@ a.th { display: inline-block; }
 
 @font-face { font-family: "Prisma Web"; src: url("/fonts/prisma/prisma-webfont.eot"); src: url("/fonts/prisma/prisma-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/prisma/prisma-webfont.woff") format("woff"), url("/fonts/prisma/prisma.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
-.clearfix:after, header:after, header .right:after, separator:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+.clearfix:after, header:after, header .right:after, layout:after, separator:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
 
-* html .clearfix, * html header, * html header .right, header * html .right, * html separator { zoom: 1; }
+* html .clearfix, * html header, * html header .right, header * html .right, * html layout, * html separator { zoom: 1; }
 
 /* IE6 */
-*:first-child + html .clearfix, *:first-child + html header, *:first-child + html header .right, header *:first-child + html .right, *:first-child + html separator { zoom: 1; }
+*:first-child + html .clearfix, *:first-child + html header, *:first-child + html header .right, header *:first-child + html .right, *:first-child + html layout, *:first-child + html separator { zoom: 1; }
 
 /* IE7 */
 .font-futura { font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
@@ -1440,6 +1440,9 @@ lyrics { font-family: "Century Expanded Web", "Georgia", "Times", serif; display
 lyrics worktitle { display: block; margin-bottom: 1.6em; }
 lyrics p tag { display: block; float: right; top: 0.125em; }
 
+loader { display: block; text-align: center; }
+loader:after { content: 'Loading ...'; }
+
 separator { display: block; width: 100%; position: relative; margin-top: 2em; height: 2em; color: #b5ad9c; }
 separator:before, separator date.center:before { content: ' '; width: 100%; height: 1em; position: absolute; top: 0; left: 0; z-index: 1; border-bottom: 1px solid #b5ad9c; }
 separator date { display: block; line-height: 1em; padding: 0 2.5%; padding-top: 0.5em; position: relative; z-index: 2; background-color: white; float: left; }
@@ -1457,3 +1460,38 @@ separator date.center { float: none; text-align: center; }
 .section.mfm h1 { text-transform: uppercase; color: #e3ceb6; font-weight: 400; font-family: 'Prisma Web'; }
 .section.mfm h3 { font-weight: 200; font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; color: white; }
 
+.section.demo1 { background-color: #f1446f; }
+.section.demo2 { background-color: #57b258; }
+.section.demo3 { background-color: #fdd846; }
+.section.demo4 { background-color: #6a82ba; }
+
+/*! article: the-service-station.css */
+.video-wrap { height: 200px; background-color: #2f2b23; }
+
+.section.service-intro { font-family: "Century Expanded Web", "Georgia", "Times", serif; min-height: 900px; background-color: #2f2b23; color: #c69c6d; }
+.section.service-intro h1 { text-transform: uppercase; font-family: "Hermes Web"; font-weight: 800; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90); opacity: 0.9; text-shadow: rgba(237, 88, 21, 0.2) 0px -0.075em 0px, rgba(237, 88, 21, 0.2) 0.05em 0.175em 0px; color: white; }
+.section.service-intro h1.callout { padding-right: 1em; }
+.section.service-intro h1.chap { color: white; }
+.section.service-intro h2, .section.service-intro p { color: white; font-family: "Century Expanded Web", "Georgia", "Times", serif; font-weight: normal; text-shadow: #2f2b23 0.25em 0.25em 0.5em; }
+.section.service-intro .row { position: relative; z-index: 10; }
+.section.service-intro .columns { position: relative; z-index: 10; }
+.section.service-intro .map-container { width: 100%; position: absolute; z-index: 5; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40); opacity: 0.4; }
+.section.service-intro .map-container .map { height: 900px; width: 100%; }
+
+.hide-video { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
+
+.yt-player { background: black; }
+
+.drive-animation { z-index: 1; height: 900px; width: 100%; overflow: hidden; position: absolute; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
+.drive-animation .step { position: absolute; height: 500px; width: 100%; top: 0; left: 0; }
+.drive-animation .step .frame { height: 500px; width: 100%; }
+
+.animation-controls { margin-top: 1em; }
+.animation-controls input[type="text"] { max-width: 80px; }
+.animation-controls button { font-size: 0.8em; }
+
+.animation-log table { margin: 0; margin-top: 1em; width: 100%; }
+.animation-log table td { width: 50%; padding: 0.25em; }
+.animation-log table td:not(.xml) { border: 1px solid #ccc; }
+.animation-log table td.title { font-weight: 600; }
+.animation-log textarea { min-height: 300px; }

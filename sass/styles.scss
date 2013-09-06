@@ -144,6 +144,10 @@ header {
   }
 }
 
+layout {
+  @extend .clearfix;
+}
+
 figure {
   padding: 1em;
   background-color: $color-neutral;
@@ -206,6 +210,14 @@ lyrics {
     display: block;
     float: right;
     top: 0.125em;
+  }
+}
+
+loader {
+  display: block;
+  text-align: center;
+  &:after {
+    content: 'Loading ...';
   }
 }
 
@@ -288,6 +300,19 @@ separator {
   }
 }
 
-/*! articles start */
+.section{
+  &.demo1 {
+    background-color: $color-pink;
+  }
+  &.demo2 {
+    background-color: $color-green;
+  }
+  &.demo3 {
+    background-color: $color-yellow;
+  }
+  &.demo4 {
+    background-color: $color-blue;
+  }
+}
+
 @import "articles/*";
-/*! articles end */

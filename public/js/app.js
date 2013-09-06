@@ -1,29 +1,27 @@
-require([
+define([
   'jquery',
   'jquery.textfill',
   'ytplayer',
   'swfobject',
 ], function($){
-  $(document).ready(function(){
+  return function(){
+    this.start = function(){
+      $.textfill({
+        animation: {
+          fadeDuration: 150
+        }
+      });
+
+      $('.textfill').textfill();
+      $('.yt-player').ytplayer();
+
+      $(window).on('load scroll', function(){
+        repositionHeader();
+      });
+    };
+
     var repositionHeader = function(){
       $('header').css('top', $(window).scrollTop());
     };
-
-    $.textfill({
-      animation: {
-        fadeDuration: 150
-      }
-    });
-
-    $('.textfill').textfill({});
-    $('.chap').textfill({});
-
-    $('.yt-player').ytplayer();
-
-    $(window).scroll(function(){
-      repositionHeader();
-    });
-
-    repositionHeader();
-  });
+  };
 });

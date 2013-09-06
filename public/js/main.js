@@ -1,54 +1,42 @@
 require.config({
-  baseUrl: 'js',
+  baseUrl: '/js',
+  urlArgs: 'bust=' + (new Date()).getTime(),
   paths: {
     'jquery':          'libs/jquery.min',
     'swfobject':       'libs/swfobject',
     'jquery.textfill': 'libs/jquery.textfill',
+    'jquery.scrollto': 'libs/jquery.scrollto.min',
+    'jquery.unevent':  'libs/jquery.unevent',
+    'jquery.mousewheel': 'libs/jquery.mousewheel',
+    'jquery.hammer':   'libs/jquery.hammer.min',
     'ytplayer':        'libs/ytplayer',
-    'google.animate':  'libs/google.animate'
+    'google.animate':  'libs/google.animate',
+    'waypoints':       'libs/waypoints.min'
   },
   shim: {
     'jquery.textfill': [ 'jquery' ],
-    'ytplayer': [ 'jquery' ]
+    'jquery.scrollto': [ 'jquery' ],
+    'jquery.unevent':  [ 'jquery' ],
+    'jquery.hammer':   [ 'jquery' ],
+    'jquery.mousehweel':   [ 'jquery' ],
+    'ytplayer':        [ 'jquery' ]
   }
 });
 
 require([
+  'jquery',
   'router',
-  'app'
-]);
+  'app',
+  'jquery.scrollto',
+  'jquery.unevent',
+  'jquery.hammer',
+  'jquery.mousewheel'
+], function($, Router, App){
+  $(document).ready(function(){
+    var app = new App();
+    app.start();
 
-/*
-require([
-  'app'
-], function($){
-
-$.article = {
-  collection: [],
-
-  push: function(f){
-    $.article.collection.push(new f());
-  },
-
-  onScroll: function(){
-    var wt = $(window).scrollTop();
-    var wh = $(window).height();
-
-    for(var i = 0, l = $.article.collection.length; i < l; ++i){
-      var a = $.article.collection[i];
-      a.startup();
-    }
-  },
-
-  isSectionActive: function(sel, wt, wh){
-    var vis = wt + wh - $(sel).offset().top / wh;
-    return true;
-  }
-};
-
-
-  require([
-    'articles/the-service-station'
-  ]);
+    var router = new Router();
+    router.start();
+  });
 });
-*/

@@ -6,6 +6,7 @@
     %script{ :type => 'text/javascript', :src => '/js/libs/modernizr.min.js' }
   %body
     = haml :header
-    = yield
-    %script{ :src => 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJCfnRfOtohEqUAMmA_mWWVFhnKf7LpU&sensor=false'}
+    %layout
+      = yield
+    -#%script{ :src => 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJCfnRfOtohEqUAMmA_mWWVFhnKf7LpU&sensor=false'}
     %script{ :type => 'text/javascript', :src => '/js/libs/require.min.js', :'data-main' => '/js/main' }

@@ -18,6 +18,7 @@
     },
     emBase:     16,
     scopeCount: 0,
+    selectors:  [],
     scope:      [],
     debug:      false,
     callbacks:  {},
@@ -148,10 +149,26 @@
     });
   };
 
+  $fn.func.addSelector = function(selector, options){
+    $fn.selectors.push([ selector, options ]);
+  };
+
+  $fn.func.refresh = function(e){
+    $.each($fn.selectors, function(i, s){
+      var fills = $(e.target).find(s[0]);
+      fills = $.unique(fills.get());
+
+      if(fills.length > 0){
+        $.each(fills, function(i, f){
+          $fn.func.addScope($(f), s[1]);
+        });
+      }
+    });
+  };
+
   $fn.func.addScope = function($scope, options){
     for(var i = 0, l = $scope.length; i < l; ++i){
       var s = $($scope[i]);
-
       var c = s.find('[data-textfill="true"]').length;
 
       if(c == 0){
@@ -159,14 +176,21 @@
       }
     }
 
+    /*
     $fn.scopeCount--;
 
     if($fn.scopeCount == 0){
       $fn.func.runCallbacks('complete');
     }
+    */
   };
 
   $fn.func.addContainerSet = function($scope, options){
+    var existing = $fn.scope.map(function(s){ return s.get().get(0) });
+    if(existing.indexOf($scope.get(0)) >= 0){
+      return;
+    }
+
     var containerSet = new $fn.obj.ContainerSet($scope, options);
     $fn.scope.push(containerSet);
     return containerSet;
@@ -623,7 +647,7 @@
       ef = Math.round(ef);
       self.effectiveFontSize = ef;
 
-      lineStyle['font-size'] = self.effectiveFontSize;
+      lineStyle['font-size'] = self.effectiveFontSize.toString() + 'px';
     };
 
     var setGutter = function(){
@@ -794,8 +818,14 @@
   };
 
   $.fn.textfill = function(options){
+    var selector = this.selector;
+
     $fn.init();
     $.textfill.scopeCount++;
-    $fn.func.addScope($(this.selector), options);
+    $fn.func.addSelector(selector);
+
+    $(document).on('DOMNodeInserted', function(e){
+      $fn.func.refresh(e);
+    });
   };
 })(jQuery, this, this.document);

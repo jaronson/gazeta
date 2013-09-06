@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'sinatra-partial'
+gem 'sinatra-contrib'
 
 group :assets do
   gem 'haml'

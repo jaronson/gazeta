@@ -11,7 +11,7 @@ images_dir      = "public/img"
 javascripts_dir = "public/js"
 
 on_stylesheet_saved do |filename|
-  ArticleCompiler.create_article_stylesheets(filename)
+#  ArticleCompiler.create_article_stylesheets(filename)
 end
 
 # You can select your preferred output style here (can be overridden via the command line):
