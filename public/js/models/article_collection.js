@@ -9,6 +9,7 @@ define([
 
     var prevIndex = 0;
     var nextIndex = -1;
+    var fromIndex = 0;
 
     this.manifest;
     this.dates = [];
@@ -49,10 +50,14 @@ define([
       }
     };
 
-    var firstOfDate = function(entry, direction){
-      var names = self.manifestJson[entry.date]
-      var pos   = names.indexOf(entry.name);
+    var firstOfDate = function(entry){
+      var names  = self.manifestJson[entry.date]
+      var pos    = names.indexOf(entry.name);
       return pos == 0;
+    };
+
+    var firstOfManifest = function(entry){
+      return entry.date == self.manifest[0].date;
     };
 
     var getArticle = function(direction){
@@ -61,14 +66,18 @@ define([
 
       attrs = self.manifest[index];
 
+      if(index == fromIndex){
+        attrs.initial = true;
+      }
+
       if(!attrs){
         return;
       }
 
       var dateline = false;
 
-      if(firstOfDate(attrs)){
-        dateline = true;
+      if(!firstOfManifest(attrs) && firstOfDate(attrs)){
+        attrs.dateline = true;
       }
 
       var article = new Article({
@@ -76,7 +85,8 @@ define([
         name: attrs.name,
         direction: direction,
         index: index,
-        dateline: dateline
+        dateline: attrs.dateline,
+        initial: attrs.initial
       });
 
       return article;
@@ -139,6 +149,7 @@ define([
         
         nextIndex = index - 1;
         prevIndex = index;
+        fromIndex = index;
       }
     };
 

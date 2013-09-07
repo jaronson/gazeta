@@ -32,33 +32,23 @@ define([
       setOptions();
       self.route();
 
-      var loadScroll = function(e, article){
-        $.scrollTo(self.activeArticle(), settings.scroll.duration);
-      };
-
-      $(window).on('load', function(){
+      $(document).on('article.init', function(){
         setActiveArticle();
         loadMore();
       });
 
-      $(window).on('scroll conformedwheel', function(e){
-        setActiveArticle();
-        loadMore();
-      });
-
-      settings.$layout().on('article.load', loadScroll);
-
-      $(window).on('scroll', function(){
-        settings.$layout().off('article.load', loadScroll);
-      });
-
-      settings.$layout().on('article.load', function(e, article){
+      $(document).on('article.populate', function(e, article){
         if(article.direction == 'up'){
-          $.scrollTo(self.activeArticle());
+          $.scrollTo(self.activeArticle(), 0);
         }
       });
 
-      settings.$layout().on('article.activeChanged', function(){
+      $(document).on('scroll', function(e){
+        setActiveArticle();
+        loadMore();
+      });
+
+      $(document).on('article.activeChanged', function(){
         setActiveAnchor();
       });
     };
@@ -70,7 +60,6 @@ define([
         from: from,
         callback: function(){
           this.next().render();
-          $(window).trigger('load');
         }
       });
     };
@@ -198,7 +187,7 @@ define([
     };
 
     var setLocationHash = function(path){
-      document.location.hash = '!/' + path;
+      document.location.replace('#!/' + path);
     };
 
     var setOptions = function(){

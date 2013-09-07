@@ -12,7 +12,11 @@ define([
         }
       });
 
-      $('.textfill').textfill();
+      $('.textfill').textfill({
+        animation: {
+          resizeDuration: 140
+        }
+      });
       $('.yt-player').ytplayer();
 
       $(window).on('load scroll', function(){

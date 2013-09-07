@@ -1,19 +1,24 @@
-(function($){
+;(function($, window, document, undefined){
   var $fn = $.textfill = function(options){
+    $fn.func.addGlobalCallbacks(options);
     $.extend(true, $.textfill.defaultOptions, options);
+
+    $fn.func.runCallbacks('before');
   };
 
   $.extend($fn, {
     util: {},
+    func: {},
+    obj:  {},
+
     initialized: false,
-    selectors:  {},
-    elements:   [],
     screenWidth: {
       current: null,
       last: null
     },
     emBase:     16,
     scopeCount: 0,
+    selectors:  [],
     scope:      [],
     debug:      false,
     callbacks:  {},
@@ -60,7 +65,7 @@
 
     var observeWindowResize = function(){
       $(window).on('resize', function(){
-        $fn.updateScreenWidth();
+        $fn.func.updateScreenWidth();
       });
     };
 
@@ -69,6 +74,12 @@
     observeWindowResize();
 
     return $fn.initialized = true;
+  };
+
+  $fn.logger = {
+    warn: function(message, vars){
+      console.warn($fn.util.supplantString(message, vars));
+    }
   };
 
   $fn.util.arrayMin = function(values){
@@ -127,46 +138,121 @@
     return null;
   };
 
-  $fn.addSelector = function(selector, options){
-    if(typeof $fn.selectors[selector] == 'undefined'){
-      $fn.selectors[selector] = options;
+  $fn.util.supplantString = function(s, o) {
+    if(typeof o == 'undefined'){
+      return s;
+    }
+
+    return s.replace(/{([^{}]*)}/g, function (a, b) {
+      var r = o[b];
+      return typeof r === 'string' || typeof r === 'number' ? r : a;
+    });
+  };
+
+  $fn.func.addSelector = function(selector, options){
+    $fn.selectors.push([ selector, options ]);
+  };
+
+  $fn.func.refresh = function(e){
+    $.each($fn.selectors, function(i, s){
+      var fills = $(e.target).find(s[0]);
+      fills = $.unique(fills.get());
+
+      if(fills.length > 0){
+        $.each(fills, function(i, f){
+          $fn.func.addScope($(f), s[1]);
+        });
+      }
+    });
+
+    $.each($fn.scope, function(i, s){
+      s.redraw();
+    });
+  };
+
+  $fn.func.addScope = function($scope, options){
+    for(var i = 0, l = $scope.length; i < l; ++i){
+      var s = $($scope[i]);
+      var c = s.find('[data-textfill="true"]').length;
+
+      if(c == 0){
+        $fn.func.addContainerSet(s, $.extend(true, {}, options));
+      }
+    }
+
+    $fn.scopeCount--;
+
+    if($fn.scopeCount == 0){
+      $fn.func.runCallbacks('complete');
     }
   };
 
-  $fn.addElements = function(target){
-    for(selector in $fn.selectors){
-      var options  = $fn.selectors[selector];
-      var elements = $(target).find(selector + ':not([data-textfill-id])').get();
+  $fn.func.addContainerSet = function($scope, options){
+    var existing = $fn.scope.map(function(s){ return s.get().get(0) });
+    if(existing.indexOf($scope.get(0)) >= 0){
+      return;
+    }
 
-      for(var i = 0, l = elements.length; i < l; ++i){
-        var e = elements[i];
+    var containerSet = new $fn.obj.ContainerSet($scope, options);
+    $fn.scope.push(containerSet);
+    return containerSet;
+  };
 
-        if(!$(e).attr('data-textfill-id')){
-          $(e).attr('data-textfill-id', Math.random());
-          $fn.elements.push(e);
-          $fn.scope.push(new $fn.ContainerSet($(e), options));
-        }
+  $fn.func.screenWidthChanged = function(){
+    return !$fn.screenWidth.last || ($fn.screenWidth.current != $fn.screenWidth.last);
+  };
+
+  $fn.func.addGlobalCallbacks = function(options){
+    var callbackKeys = [
+      'before',
+      'complete'
+    ];
+
+    for(var i = 0, l = callbackKeys.length; i < l; ++i){
+      var k = callbackKeys[i];
+      var c = options[k];
+
+      if(typeof c == 'function'){
+        $fn.callbacks[k] = c;
+        delete options[k];
       }
     }
   };
 
-  $fn.screenWidthChanged = function(){
-    return !$fn.screenWidth.last || ($fn.screenWidth.current != $fn.screenWidth.last);
+  $fn.func.runCallbacks = function(when){
+    if(when){
+      var f = $fn.callbacks[when];
+
+      if(typeof f == 'function'){
+        return $.proxy(f, $fn)();
+      }
+    } else {
+      for(key in $fn.callbacks){
+        var f = $fn.callbacks[key];
+        if(typeof f == 'function'){
+          return $.proxy(f, $fn)();
+        }
+      }
+    }
+    return false;
   };
 
-  $fn.updateScreenWidth = function(){
+  $fn.func.updateScreenWidth = function(){
     $fn.screenWidth.last = $fn.screenWidth.current;
     $fn.screenWidth.current = $(window).width();
 
     if($fn.func.screenWidthChanged()){
+      $fn.func.runCallbacks('before');
 
       for(var i = 0, l = $fn.scope.length; i < l; ++i){
         $fn.scope[i].redraw();
       }
+
+      $fn.func.runCallbacks('complete');
     }
   };
 
-  $fn.ContainerSet = function($scope, options){
+  $fn.obj.ContainerSet = function($scope, options){
     var self     = this;
     var scope    = $scope;
     var children = [];
@@ -272,7 +358,7 @@
     };
 
     var addChild = function(child, index){
-      children.push(new $fn.TextContainer(self, child, index));
+      children.push(new $fn.obj.TextContainer(self, child, index));
     };
 
     var hasBreakpoint = function(){
@@ -352,7 +438,7 @@
     init();
   };
 
-  $fn.TextContainer = function(parent, element, index){
+  $fn.obj.TextContainer = function(parent, element, index){
     var self   = this;
     var lines;
     var comparator;
@@ -731,16 +817,11 @@
     init();
   };
 
-
   $.fn.textfill = function(options){
     var selector = this.selector;
 
-    $fn.addSelector(selector, options);
-
-    $(document).on('DOMNodeInserted', function(e){
-      $fn.init();
-      $fn.addElements(e.target);
-    });
+    $fn.init();
+    $.textfill.scopeCount++;
+    $fn.func.addScope(selector);
   };
-
-})(jQuery);
+})(jQuery, this, this.document);

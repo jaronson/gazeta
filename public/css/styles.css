@@ -1452,8 +1452,6 @@ separator date.center { float: none; text-align: center; }
 
 .yt-player { margin: 0 auto; height: 400px; width: 100%; }
 
-.textfill { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
-
 .section { padding-top: 2em; padding-bottom: 2.5em; position: relative; }
 
 .section.mfm { background-color: #2a1807; color: white; }

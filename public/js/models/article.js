@@ -10,10 +10,12 @@ define([
     this.date       = attrs.date;
     this.name       = attrs.name;
     this.index      = attrs.index;
-    this.direction  = attrs.direction == 'prev' ? 'up' : 'down'; 
+    this.initial    = attrs.initial || false;
+    this.direction  = attrs.direction == 'prev' ? 'up' : 'down';
     this.dateline   = attrs.dateline;
     this.path       = attrs.date + '/' + this.name;
     this.articleId  = 'article-' + self.name + '-' + Math.random().toString().replace('.','');
+    this.selector   = '#' + this.articleId;
     this.target;
     this.loader;
     this.html;
@@ -36,7 +38,7 @@ define([
       setTarget();
 
       if(self.dateline){
-        //addDateline();
+        addDateline();
       }
 
       $.ajax({
@@ -84,19 +86,20 @@ define([
         self.target.appendTo(settings.$layout());
       }
 
-      addLoader();
+      self.target.trigger('article.load', self);
+
+      //addLoader();
 
       self.target.on('populate', function(){
-        removeLoader();
-
+        //removeLoader();
         $(self.html).appendTo(self.target);
-
-        fitToScreen();
-        settings.$layout().trigger('article.load', self);
+        if(self.initial){
+          self.target.trigger('article.init', self);
+        }
+        self.target.trigger('article.populate', self);
       });
 
       $(window).on('resize orientationchange', function(){
-        fitToScreen();
       });
     };
 
