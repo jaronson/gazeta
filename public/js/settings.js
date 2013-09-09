@@ -8,10 +8,10 @@ define([
       section: '.section,section'
     },
     scroll: {
-      duration: 60 
+      duration: 260 
     },
     mousewheel: {
-      timeout: 900
+      timeout: 700
     }
   };
 

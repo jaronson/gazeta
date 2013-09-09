@@ -6,13 +6,18 @@ define([
   return function(options){
     var self = this;
     var activeArticle;
+    var activeSection;
+    var logEvents = true;
 
     this.defaults = {
-      preloadCount: 2
     };
 
     this.activeArticle = function(){
       return $(activeArticle);
+    };
+
+    this.activeSection = function(){
+      return $(activeSection);
     };
 
     this.atPageStart = function(){
@@ -24,6 +29,14 @@ define([
         $(document).scrollTop()) >= document.body.offsetHeight;
     };
 
+    this.logEvent = function(msg){
+      if(!logEvents){
+        return;
+      }
+
+      console.log('event: ' + msg);
+    };
+
     this.route = function(){
       loadIndex();
     };
@@ -31,26 +44,47 @@ define([
     this.start = function(){
       setOptions();
       self.route();
+      //conformMousewheel();
 
       $(document).on('article.init', function(){
+        self.logEvent('article.init');
+
         setActiveArticle();
+        setActiveSection();
+
         loadMore();
+
+        if(activeArticle){
+          $.scrollTo(self.activeArticle(), 0);
+        }
       });
 
       $(document).on('article.populate', function(e, article){
+        self.logEvent('article.populate');
+
         if(article.direction == 'up'){
           $.scrollTo(self.activeArticle(), 0);
         }
       });
 
       $(document).on('scroll', function(e){
+        self.logEvent('document.scroll');
+
         setActiveArticle();
+        setActiveSection();
         loadMore();
       });
 
       $(document).on('article.activeChanged', function(){
+        self.logEvent('article.activeChanged');
         setActiveAnchor();
+        $(window).trigger('load');
+        $(window).trigger('textfill');
       });
+
+      //$(window).on('conformedwheel', function(evt, d){
+        //scrollY(d.directionY);
+      //});
     };
 
     var loadIndex = function(){
@@ -75,7 +109,8 @@ define([
     };
 
     var getAnchorPath = function(){
-      var path = document.location.hash.replace('#!/','');
+      var path = document.location.hash.toString();
+      path     = path.replace('#!/','');
 
       if($.trim(path) != ''){
         return path;
@@ -89,7 +124,7 @@ define([
 
     var setActiveArticle = function(){
       var articles = settings.$articles();
-      var active = getActive(articles);
+      var active   = getActive(articles);
 
       if(!active){
         return;
@@ -97,11 +132,29 @@ define([
 
       if(!activeArticle || active.attr('id') != $(activeArticle).attr('id')){
         activeArticle = active.get(0);
-        settings.$layout().trigger('article.activeChanged');
+        active.trigger('article.activeChanged');
+      }
+    };
+
+    var setActiveSection = function(){
+      var sections = settings.$sections();
+      var aSection = getActive(sections);
+
+      if(!aSection){
+        return;
+      }
+
+      if(!activeSection || aSection.get(0) != activeSection){
+        activeSection = aSection.get(0);
+        settings.$layout().trigger('section.activeChanged');
       }
     };
 
     var getActive = function(scope){
+      if(scope.length == 1){
+        return scope;
+      }
+
       var wt = $(window).scrollTop();
       var wh = $(window).height();
       var wb = wt + wh;
@@ -133,6 +186,22 @@ define([
       document.location.hash = '';
     };
 
+    var getLocationHash = function(){
+      return document.location.hash;
+    };
+
+    var setLocationHash = function(path){
+      document.location.replace('#!/' + path);
+    };
+
+    var setOptions = function(){
+      var attrs = $.extend({}, self.defaults, options);
+
+      for(key in attrs){
+        self[key] = attrs[key];
+      }
+    };
+
     var conformMousewheel = function(){
       var wheelDelta;
       var wheelTimer;
@@ -140,10 +209,14 @@ define([
       $(window).on('mousewheel', function(e, d, dx, dy){
         if(!wheelDelta){
           wheelDelta = d;
+          dx = dx >= 0 ? 'left' : 'right';
           dy = dy >= 0 ? 'up' : 'down';
+
           $(window).trigger('conformedwheel', {
+            directionX: dx,
             directionY: dy
           });
+          $(window).trigger('scroll');
           wheelTimer = setTimeout(function(){
             wheelDelta = null;
           }, settings.mousewheel.timeout);
@@ -154,12 +227,10 @@ define([
       });
     };
 
-    var getLocationHash = function(){
-      return document.location.hash;
-    };
-
     var scrollY = function(direction){
       var getNextSection = function(){
+        return direction == 'up' ? self.activeSection().prev() :
+          self.activeSection().next();
       };
 
       var getNextArticle = function(){
@@ -183,18 +254,6 @@ define([
         $.scrollTo(getNextArticle(), settings.scroll.duration);
       } else {
         loader();
-      }
-    };
-
-    var setLocationHash = function(path){
-      document.location.replace('#!/' + path);
-    };
-
-    var setOptions = function(){
-      var attrs = $.extend({}, self.defaults, options);
-
-      for(key in attrs){
-        self[key] = attrs[key];
       }
     };
   };

@@ -1,14 +1,12 @@
 @media #{ $small }{
+  h1 {
+    font-size: 4em;
+  }
 }
 
-@media #{ $small }{
-  p {
-    font-size: 1.2em;
-  }
-
-  #intro {
-    .hide-for-small {
-      margin-top: 2em;
-    }
+@media #{ $large }{
+  h1 {
+    font-size: 8em;
+    line-height: 0.8;
   }
 }

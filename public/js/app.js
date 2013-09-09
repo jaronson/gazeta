@@ -1,26 +1,15 @@
 define([
   'jquery',
-  'jquery.textfill',
-  'ytplayer',
-  'swfobject',
+  'jquery.textfill'
 ], function($){
   return function(){
     this.start = function(){
-      $.textfill({
-        animation: {
-          fadeDuration: 150
-        }
-      });
-
-      $('.textfill').textfill({
-        animation: {
-          resizeDuration: 140
-        }
-      });
-      $('.yt-player').ytplayer();
-
       $(window).on('load scroll', function(){
         repositionHeader();
+      });
+
+      $(window).on('resize', function(){
+        $('layout').css('width', $(window).width() + 'px');
       });
     };
 

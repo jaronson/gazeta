@@ -15,10 +15,9 @@
     text-transform: uppercase;
     font-family: $font-family-hermes;
     font-weight: 800;
-    @include opacity(0.9);
     @include text-shadow(
-      rgba($color-orange, 0.2) 0px -0.075em 0px,
-      rgba($color-orange, 0.2) 0.05em 0.175em 0px
+      rgba($color-orange, 0.2) 0px -2px 0px,
+      rgba($color-orange, 0.2) 2px 5px 0px
       );
     color: $color-light;
 
@@ -27,6 +26,7 @@
     }
 
     &.chap {
+      margin-top: 0;
       color: $color-light;
     }
   }

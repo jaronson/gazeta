@@ -41,6 +41,8 @@ define([
         addDateline();
       }
 
+      addLoader();
+
       $.ajax({
         method: 'GET',
         url: '/article/' + self.path,
@@ -71,6 +73,12 @@ define([
       dateline.appendTo(self.target);
     };
 
+    var addSectionClasses = function(){
+      self.sections().each(function(i){
+        $(this).addClass('section-' + (i + 1));
+      });
+    };
+
     var removeLoader = function(){
       self.loader.remove();
     };
@@ -88,24 +96,29 @@ define([
 
       self.target.trigger('article.load', self);
 
-      //addLoader();
-
       self.target.on('populate', function(){
-        //removeLoader();
+        removeLoader();
+
         $(self.html).appendTo(self.target);
+
+        addSectionClasses();
+        fitToScreen();
+
+        self.target.trigger('article.populate', self);
+
         if(self.initial){
           self.target.trigger('article.init', self);
         }
-        self.target.trigger('article.populate', self);
       });
 
       $(window).on('resize orientationchange', function(){
+        fitToScreen();
       });
     };
 
     var fitToScreen = function(){
       self.sections().css({
-        height: $(window).height() + 'px'
+        width:  $(window).width() + 'px'
       });
     };
 

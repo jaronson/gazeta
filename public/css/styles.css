@@ -1386,12 +1386,12 @@ a.th { display: inline-block; }
 
 @font-face { font-family: "Prisma Web"; src: url("/fonts/prisma/prisma-webfont.eot"); src: url("/fonts/prisma/prisma-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/prisma/prisma-webfont.woff") format("woff"), url("/fonts/prisma/prisma.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
-.clearfix:after, header:after, header .right:after, layout:after, separator:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+.clearfix:after, header:after, header .right:after, layout:after, separator:after, article:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
 
-* html .clearfix, * html header, * html header .right, header * html .right, * html layout, * html separator { zoom: 1; }
+* html .clearfix, * html header, * html header .right, header * html .right, * html layout, * html separator, * html article { zoom: 1; }
 
 /* IE6 */
-*:first-child + html .clearfix, *:first-child + html header, *:first-child + html header .right, header *:first-child + html .right, *:first-child + html layout, *:first-child + html separator { zoom: 1; }
+*:first-child + html .clearfix, *:first-child + html header, *:first-child + html header .right, header *:first-child + html .right, *:first-child + html layout, *:first-child + html separator, *:first-child + html article { zoom: 1; }
 
 /* IE7 */
 .font-futura { font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
@@ -1414,10 +1414,12 @@ header ul.tags li a { text-indent: 100%; width: 1.5em; padding: 1em 0; }
 header ul.links li a { width: 2em; text-align: center; }
 header ul.links li a img { display: inline; width: 1em; line-height: 1em; }
 header .right { padding: 0.33em; padding-right: 2.5%; background-color: #2f2b23; }
-header .wordmark { float: right; margin: 0; }
+header .wordmark { height: 2em; float: right; margin: 0; }
 header .wordmark img { display: inline; width: 8em; line-height: 1em; }
 header .current { padding: 1em; line-height: 1em; float: left; text-transform: uppercase; }
 header .current strong { font-weight: 400; }
+
+layout { display: block; overflow: hidden; }
 
 figure { padding: 1em; background-color: #f6f5f4; }
 figure figcaption { margin-top: 0.5em; margin-bottom: 1.25em; }
@@ -1452,24 +1454,21 @@ separator date.center { float: none; text-align: center; }
 
 .yt-player { margin: 0 auto; height: 400px; width: 100%; }
 
-.section { padding-top: 2em; padding-bottom: 2.5em; position: relative; }
+article { display: block; clear: both; }
+
+.section { padding-top: 2em; padding-bottom: 2.5em; position: relative; float: right; }
 
 .section.mfm { background-color: #2a1807; color: white; }
-.section.mfm h1 { text-transform: uppercase; color: #e3ceb6; font-weight: 400; font-family: 'Prisma Web'; }
+.section.mfm h1 { text-transform: uppercase; color: #e3ceb6; font-weight: 400; font-family: 'Prisma Web'; letter-spacing: 0.01em; }
 .section.mfm h3 { font-weight: 200; font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; color: white; }
-
-.section.demo1 { background-color: #f1446f; }
-.section.demo2 { background-color: #57b258; }
-.section.demo3 { background-color: #fdd846; }
-.section.demo4 { background-color: #6a82ba; }
 
 /*! article: the-service-station.css */
 .video-wrap { height: 200px; background-color: #2f2b23; }
 
 .section.service-intro { font-family: "Century Expanded Web", "Georgia", "Times", serif; min-height: 900px; background-color: #2f2b23; color: #c69c6d; }
-.section.service-intro h1 { text-transform: uppercase; font-family: "Hermes Web"; font-weight: 800; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90); opacity: 0.9; text-shadow: rgba(237, 88, 21, 0.2) 0px -0.075em 0px, rgba(237, 88, 21, 0.2) 0.05em 0.175em 0px; color: white; }
+.section.service-intro h1 { text-transform: uppercase; font-family: "Hermes Web"; font-weight: 800; text-shadow: rgba(237, 88, 21, 0.2) 0px -2px 0px, rgba(237, 88, 21, 0.2) 2px 5px 0px; color: white; }
 .section.service-intro h1.callout { padding-right: 1em; }
-.section.service-intro h1.chap { color: white; }
+.section.service-intro h1.chap { margin-top: 0; color: white; }
 .section.service-intro h2, .section.service-intro p { color: white; font-family: "Century Expanded Web", "Georgia", "Times", serif; font-weight: normal; text-shadow: #2f2b23 0.25em 0.25em 0.5em; }
 .section.service-intro .row { position: relative; z-index: 10; }
 .section.service-intro .columns { position: relative; z-index: 10; }
@@ -1493,3 +1492,7 @@ separator date.center { float: none; text-align: center; }
 .animation-log table td:not(.xml) { border: 1px solid #ccc; }
 .animation-log table td.title { font-weight: 600; }
 .animation-log textarea { min-height: 300px; }
+
+@media only screen and (min-width: 768px) { h1 { font-size: 4em; } }
+@media only screen and (min-width: 1440px) { h1 { font-size: 8em; line-height: 0.8; } }
+.textfill { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }

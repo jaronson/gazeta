@@ -125,6 +125,7 @@ header {
   }
 
   .wordmark {
+    height: $header-size;
     float: right;
     margin: 0;
 
@@ -148,7 +149,9 @@ header {
 }
 
 layout {
+  display: block;
   @extend .clearfix;
+  overflow: hidden;
 }
 
 figure {
@@ -275,14 +278,17 @@ separator {
   width: 100%;
 }
 
-.textfill {
-  //@include opacity(0);
+article {
+  @extend .clearfix;
+  display: block;
+  clear: both;
 }
 
 .section {
   padding-top: $header-size;
   padding-bottom: $header-size * 1.25;
   position: relative;
+  float: right;
 }
 
 .section.mfm {
@@ -294,6 +300,7 @@ separator {
     color: lighten($color-brown-pale-warm, 20%);
     font-weight: 400;
     font-family: 'Prisma Web';
+    letter-spacing: 0.01em;
   }
 
   h3 {
@@ -303,19 +310,9 @@ separator {
   }
 }
 
-.section{
-  &.demo1 {
-    background-color: $color-pink;
-  }
-  &.demo2 {
-    background-color: $color-green;
-  }
-  &.demo3 {
-    background-color: $color-yellow;
-  }
-  &.demo4 {
-    background-color: $color-blue;
-  }
-}
-
 @import "articles/*";
+@import "media";
+
+.textfill {
+  @include opacity(0);
+}
