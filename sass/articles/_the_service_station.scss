@@ -1,13 +1,18 @@
 /*! article: the-service-station.css */
+@import "responsivity/fonts/hermes";
 
 .video-wrap {
   height: 200px;
   background-color: $color-dark;
 }
 
+article.the-service-station {
+  background-color: $color-dark;
+}
+
 .section.service-intro {
   font-family: $font-family-century;
-  min-height: 900px;
+  //min-height: 900px;
   background-color: $color-dark;
   color: $color-brown-pale-warm;
 
@@ -57,7 +62,7 @@
     @include opacity(0.4);
 
     .map {
-      height: 900px;
+      //height: 900px;
       width: 100%;
     }
   }
@@ -76,7 +81,7 @@
 
 .drive-animation{
   z-index: 1;
-  height: 900px;
+  //height: 900px;
   width: 100%;
   overflow: hidden;
   position: absolute;

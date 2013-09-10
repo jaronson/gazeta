@@ -1,8 +1,9 @@
 define([
   'jquery',
+  'utils',
   'settings',
   'helpers/view'
-], function($, settings, view){
+], function($, utils, settings, view){
   return function(attrs){
     var self = this;
     var rendered = false;
@@ -10,15 +11,20 @@ define([
     this.date       = attrs.date;
     this.name       = attrs.name;
     this.index      = attrs.index;
+    this.number     = attrs.number;
     this.initial    = attrs.initial || false;
     this.direction  = attrs.direction == 'prev' ? 'up' : 'down';
     this.dateline   = attrs.dateline;
     this.path       = attrs.date + '/' + this.name;
     this.articleId  = 'article-' + self.name + '-' + Math.random().toString().replace('.','');
     this.selector   = '#' + this.articleId;
+    this.cssUrl     = '/css/articles/' + this.name + '.css';
     this.target;
     this.loader;
     this.html;
+
+    var init = function(){
+    };
 
     this.isAfter = function(other){
       return other.idnex > self.index;
@@ -28,6 +34,19 @@ define([
       return other.index < self.index;
     };
 
+    this.loadStylesheet = function(){
+      utils.ajax.fileExists({
+        url: self.cssUrl,
+        success: function(){
+          var link = $('<link/>').attr('rel', 'stylesheet').
+            attr('href', self.cssUrl).
+            attr('type', 'text/css');
+
+          link.appendTo($('head'));
+        }
+      });
+    };
+
     this.render = function(){
       if(rendered){
         return false;
@@ -35,6 +54,7 @@ define([
 
       rendered = true;
 
+      self.loadStylesheet();
       setTarget();
 
       if(self.dateline){
@@ -61,9 +81,6 @@ define([
       return self.target.find(settings.selectors.section);
     }
 
-    var init = function(){
-    };
-
     var addLoader = function(){
       self.loader = $('<loader/>').appendTo(self.target);
     };
@@ -71,6 +88,19 @@ define([
     var addDateline = function(){
       var dateline = view.dateSeparator(self.date);
       dateline.appendTo(self.target);
+    };
+
+    var addPageNumbers = function(){
+      for(var i = 0, l = self.sections().length; i < l; ++i){
+        var section = $(self.sections()[i]);
+        var number  = $('<number/>');
+        var major   = $('<major/>').text(self.number);
+        var minor   = $('<minor/>').text(i + 1);
+
+        major.appendTo(number);
+        minor.appendTo(number);
+        number.appendTo(section);
+      }
     };
 
     var addSectionClasses = function(){
@@ -85,6 +115,7 @@ define([
 
     var setTarget = function(){
       self.target = $('<article/>').
+        addClass(self.name).
         attr('id', self.articleId).
         attr('data-path', self.path);
 
@@ -102,6 +133,7 @@ define([
         $(self.html).appendTo(self.target);
 
         addSectionClasses();
+        addPageNumbers();
         fitToScreen();
 
         self.target.trigger('article.populate', self);
@@ -117,9 +149,7 @@ define([
     };
 
     var fitToScreen = function(){
-      self.sections().css({
-        width:  $(window).width() + 'px'
-      });
+      self.sections().css('min-height', $(window).height() + 'px');
     };
 
     init();

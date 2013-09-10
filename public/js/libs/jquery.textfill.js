@@ -125,6 +125,9 @@
   };
 
   $fn.resize = function(evt){
+    for(s in $fn.selectors){
+      $fn.addElements($(s));
+    };
     for(var i = 0, l = $fn.elements.length; i < l; ++i){
       $($fn.elements[i]).trigger('filltext');
     }
@@ -195,8 +198,10 @@
     $fn.init();
     $fn.addSelector(selector, options);
 
-    $(window).load(function(){
-      $(window).trigger('filltext');
+    $(document).ready(function(){
+      $fn.addElements(document);
+
+      $(window).trigger('textfill');
     });
   };
 })(jQuery);

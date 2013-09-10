@@ -1362,36 +1362,12 @@ a.th { display: inline-block; }
 
 @font-face { font-family: "Century Expanded Web"; src: url("/fonts/century_expanded/century_expanded_bold_italic_bt-webfont.eot"); src: url("/fonts/century_expanded/century_expanded_bold_italic_bt-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/century_expanded/century_expanded_bold_italic_bt-webfont.woff") format("woff"), url("/fonts/century_expanded/century_expanded_bold_italic_bt.ttf") format("truetype"); font-weight: bold; font-style: italic; }
 
-@font-face { font-family: "Hermes Web"; src: url("/fonts/hermes/hermes-regular-webfont.eot"); src: url("/fonts/hermes/hermes-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/hermes/hermes-regular-webfont.woff") format("woff"), url("/fonts/hermes/hermes-regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+.clearfix:after, header:after, header .right:after, page:after, .page:after, layout:after, .layout:after, article:after, .article:after, section:after, .section:after, separator:after, .separator:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
 
-@font-face { font-family: "Hermes Web"; src: url("/fonts/hermes/hermes-bold-webfont.eot"); src: url("/fonts/hermes/hermes-bold-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/hermes/hermes-bold-webfont.woff") format("woff"), url("/fonts/hermes/hermes-bold.ttf") format("truetype"); font-weight: bold; font-style: normal; }
-
-@font-face { font-family: "Hermes Web"; src: url("/fonts/hermes/hermes-black-webfont.eot"); src: url("/fonts/hermes/hermes-black-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/hermes/hermes-black-webfont.woff") format("woff"), url("/fonts/hermes/hermes-black.ttf") format("truetype"); font-weight: 800; font-style: normal; }
-
-@font-face { font-family: "Bello Script Web"; src: url("/fonts/bello_script/Bello-Script-webfont.eot"); src: url("/fonts/bello_script/Bello-Script-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/bello_script/Bello-Script-webfont.woff") format("woff"), url("/fonts/bello_script/Bello-Script.ttf") format("truetype"); font-weight: normal; font-style: normal; }
-
-@font-face { font-family: "Trade Gothic Web"; src: url("/fonts/tradegothic/tradegothic-light-webfont.eot"); src: url("/fonts/tradegothic/tradegothic-light-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/tradegothic/tradegothic-light-webfont.woff") format("woff"), url("/fonts/tradegothic/tradegothic-light.ttf") format("truetype"); font-weight: 200; font-style: normal; }
-
-@font-face { font-family: "Trade Gothic Web"; src: url("/fonts/tradegothic/tradegothic-webfont.eot"); src: url("/fonts/tradegothic/tradegothic-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/tradegothic/tradegothic-webfont.woff") format("woff"), url("/fonts/tradegothic/tradegothic.ttf") format("truetype"); font-weight: normal; font-style: normal; }
-
-@font-face { font-family: "Trade Gothic Web"; src: url("/fonts/tradegothic/tradegothic-boldtwo-webfont.eot"); src: url("/fonts/tradegothic/tradegothic-boldtwo-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/tradegothic/tradegothic-boldtwo-webfont.woff") format("woff"), url("/fonts/tradegothic/tradegothic-boldtwo.ttf") format("truetype"); font-weight: bold; font-style: normal; }
-
-@font-face { font-family: "Neutraface Condensed Web"; src: url("/fonts/neutraface/NeutrafaceCondensed-Thin-webfont.eot"); src: url("/fonts/neutraface/NeutrafaceCondensed-Thin-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/neutraface/NeutrafaceCondensed-Thin-webfont.woff") format("woff"), url("/fonts/neutraface/NeutrafaceCondensed-Thin.ttf") format("truetype"); font-weight: 200; font-style: normal; }
-
-@font-face { font-family: "Neutraface Condensed Web"; src: url("/fonts/neutraface/NeutrafaceCondensed-Light-webfont.eot"); src: url("/fonts/neutraface/NeutrafaceCondensed-Light-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/neutraface/NeutrafaceCondensed-Light-webfont.woff") format("woff"), url("/fonts/neutraface/NeutrafaceCondensed-Light.ttf") format("truetype"); font-weight: 400; font-style: normal; }
-
-@font-face { font-family: "Neutraface Condensed Web"; src: url("/fonts/neutraface/NeutrafaceCondensed-Medium-webfont.eot"); src: url("/fonts/neutraface/NeutrafaceCondensed-Medium-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/neutraface/NeutrafaceCondensed-Medium-webfont.woff") format("woff"), url("/fonts/neutraface/NeutrafaceCondensed-Medium.ttf") format("truetype"); font-weight: normal; font-style: normal; }
-
-@font-face { font-family: "Neutraface Condensed Web"; src: url("/fonts/neutraface/NeutrafaceCondensed-Bold-webfont.eot"); src: url("/fonts/neutraface/NeutrafaceCondensed-Bold-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/neutraface/NeutrafaceCondensed-Bold-webfont.woff") format("woff"), url("/fonts/neutraface/NeutrafaceCondensed-Bold.ttf") format("truetype"); font-weight: bold; font-style: normal; }
-
-@font-face { font-family: "Prisma Web"; src: url("/fonts/prisma/prisma-webfont.eot"); src: url("/fonts/prisma/prisma-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/prisma/prisma-webfont.woff") format("woff"), url("/fonts/prisma/prisma.ttf") format("truetype"); font-weight: normal; font-style: normal; }
-
-.clearfix:after, header:after, header .right:after, layout:after, separator:after, article:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
-
-* html .clearfix, * html header, * html header .right, header * html .right, * html layout, * html separator, * html article { zoom: 1; }
+* html .clearfix, * html header, * html header .right, header * html .right, * html page, * html .page, * html layout, * html .layout, * html article, * html .article, * html section, * html .section, * html separator, * html .separator { zoom: 1; }
 
 /* IE6 */
-*:first-child + html .clearfix, *:first-child + html header, *:first-child + html header .right, header *:first-child + html .right, *:first-child + html layout, *:first-child + html separator, *:first-child + html article { zoom: 1; }
+*:first-child + html .clearfix, *:first-child + html header, *:first-child + html header .right, header *:first-child + html .right, *:first-child + html page, *:first-child + html .page, *:first-child + html layout, *:first-child + html .layout, *:first-child + html article, *:first-child + html .article, *:first-child + html section, *:first-child + html .section, *:first-child + html separator, *:first-child + html .separator { zoom: 1; }
 
 /* IE7 */
 .font-futura { font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; }
@@ -1419,7 +1395,14 @@ header .wordmark img { display: inline; width: 8em; line-height: 1em; }
 header .current { padding: 1em; line-height: 1em; float: left; text-transform: uppercase; }
 header .current strong { font-weight: 400; }
 
-layout { display: block; overflow: hidden; }
+page, .page { display: block; position: relative; }
+
+layout, .layout { display: block; position: relative; }
+
+article, .article { display: block; clear: both; position: relative; }
+
+section, .section { display: block; position: relative; padding-top: 2em; padding-bottom: 2.5em; }
+section:not(.section-1), .section:not(.section-1) { border-top: 1px solid #b5ad9c; }
 
 figure { padding: 1em; background-color: #f6f5f4; }
 figure figcaption { margin-top: 0.5em; margin-bottom: 1.25em; }
@@ -1442,57 +1425,22 @@ lyrics { font-family: "Century Expanded Web", "Georgia", "Times", serif; display
 lyrics worktitle { display: block; margin-bottom: 1.6em; }
 lyrics p tag { display: block; float: right; top: 0.125em; }
 
-loader { display: block; text-align: center; }
-loader:after { content: 'Loading ...'; }
+loader, .loader { display: block; text-align: center; }
+loader:after, .loader:after { content: 'Loading ...'; }
 
-separator { display: block; width: 100%; position: relative; margin-top: 2em; height: 2em; color: #b5ad9c; }
-separator:before, separator date.center:before { content: ' '; width: 100%; height: 1em; position: absolute; top: 0; left: 0; z-index: 1; border-bottom: 1px solid #b5ad9c; }
-separator date { display: block; line-height: 1em; padding: 0 2.5%; padding-top: 0.5em; position: relative; z-index: 2; background-color: white; float: left; }
-separator date.center { float: none; text-align: center; }
+separator, .separator { display: block; width: 100%; position: relative; z-index: 2; height: 2em; color: #b5ad9c; background-color: white; }
+separator:before, separator date.center:before, separator .date.center:before, .separator date.center:before, .separator .date.center:before, .separator:before { content: ' '; width: 100%; height: 1em; position: absolute; top: 0; left: 0; z-index: 1; border-bottom: 1px solid #b5ad9c; }
+separator date, separator .date, .separator date, .separator .date { display: block; line-height: 1em; padding: 0 2.5%; padding-top: 0.5em; position: relative; z-index: 2; float: left; background-color: white; }
+separator date.center, separator .date.center, .separator date.center, .separator .date.center { float: none; text-align: center; }
+
+number, .number { display: block; color: #b5ad9c; text-align: right; position: absolute; z-index: 1; bottom: 0; right: 0; padding: 0 2.5%; height: 2em; }
+number minor:before, .number minor:before { content: '.'; }
 
 .category-indicator { height: 1em; width: 100%; }
 
 .yt-player { margin: 0 auto; height: 400px; width: 100%; }
 
-article { display: block; clear: both; }
-
-.section { padding-top: 2em; padding-bottom: 2.5em; position: relative; float: right; }
-
-.section.mfm { background-color: #2a1807; color: white; }
-.section.mfm h1 { text-transform: uppercase; color: #e3ceb6; font-weight: 400; font-family: 'Prisma Web'; letter-spacing: 0.01em; }
-.section.mfm h3 { font-weight: 200; font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; color: white; }
-
-/*! article: the-service-station.css */
-.video-wrap { height: 200px; background-color: #2f2b23; }
-
-.section.service-intro { font-family: "Century Expanded Web", "Georgia", "Times", serif; min-height: 900px; background-color: #2f2b23; color: #c69c6d; }
-.section.service-intro h1 { text-transform: uppercase; font-family: "Hermes Web"; font-weight: 800; text-shadow: rgba(237, 88, 21, 0.2) 0px -2px 0px, rgba(237, 88, 21, 0.2) 2px 5px 0px; color: white; }
-.section.service-intro h1.callout { padding-right: 1em; }
-.section.service-intro h1.chap { margin-top: 0; color: white; }
-.section.service-intro h2, .section.service-intro p { color: white; font-family: "Century Expanded Web", "Georgia", "Times", serif; font-weight: normal; text-shadow: #2f2b23 0.25em 0.25em 0.5em; }
-.section.service-intro .row { position: relative; z-index: 10; }
-.section.service-intro .columns { position: relative; z-index: 10; }
-.section.service-intro .map-container { width: 100%; position: absolute; z-index: 5; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40); opacity: 0.4; }
-.section.service-intro .map-container .map { height: 900px; width: 100%; }
-
-.hide-video { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
-
-.yt-player { background: black; }
-
-.drive-animation { z-index: 1; height: 900px; width: 100%; overflow: hidden; position: absolute; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
-.drive-animation .step { position: absolute; height: 500px; width: 100%; top: 0; left: 0; }
-.drive-animation .step .frame { height: 500px; width: 100%; }
-
-.animation-controls { margin-top: 1em; }
-.animation-controls input[type="text"] { max-width: 80px; }
-.animation-controls button { font-size: 0.8em; }
-
-.animation-log table { margin: 0; margin-top: 1em; width: 100%; }
-.animation-log table td { width: 50%; padding: 0.25em; }
-.animation-log table td:not(.xml) { border: 1px solid #ccc; }
-.animation-log table td.title { font-weight: 600; }
-.animation-log textarea { min-height: 300px; }
-
 @media only screen and (min-width: 768px) { h1 { font-size: 4em; } }
 @media only screen and (min-width: 1440px) { h1 { font-size: 8em; line-height: 0.8; } }
 .textfill { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
+

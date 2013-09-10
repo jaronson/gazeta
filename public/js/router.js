@@ -7,7 +7,7 @@ define([
     var self = this;
     var activeArticle;
     var activeSection;
-    var logEvents = true;
+    var logEvents = false;
 
     this.defaults = {
     };
@@ -37,14 +37,26 @@ define([
       console.log('event: ' + msg);
     };
 
-    this.route = function(){
-      loadIndex();
-    };
-
     this.start = function(){
       setOptions();
-      self.route();
-      //conformMousewheel();
+
+      if(document.location.pathname == '/'){
+        loadIndex();
+        //conformMousewheel();
+      } else {
+        $(window).trigger('textfill');
+      }
+    };
+
+    var loadIndex = function(){
+      var from = getAnchorPath();
+
+      self.collection = new ArticleCollection({
+        from: from,
+        callback: function(){
+          this.next().render();
+        }
+      });
 
       $(document).on('article.init', function(){
         self.logEvent('article.init');
@@ -72,28 +84,23 @@ define([
 
         setActiveArticle();
         setActiveSection();
+
         loadMore();
       });
 
       $(document).on('article.activeChanged', function(){
         self.logEvent('article.activeChanged');
         setActiveAnchor();
+
         $(window).trigger('load');
         $(window).trigger('textfill');
       });
 
-      //$(window).on('conformedwheel', function(evt, d){
-        //scrollY(d.directionY);
-      //});
-    };
-
-    var loadIndex = function(){
-      var from = getAnchorPath();
-
-      self.collection = new ArticleCollection({
-        from: from,
-        callback: function(){
-          this.next().render();
+      $(window).on('conformedwheel', function(evt, d){
+        if(d.dy){
+          scrollY(d.dy);
+        } else if(d.dx){
+          scrollX(d.dx);
         }
       });
     };
@@ -209,14 +216,20 @@ define([
       $(window).on('mousewheel', function(e, d, dx, dy){
         if(!wheelDelta){
           wheelDelta = d;
-          dx = dx >= 0 ? 'left' : 'right';
-          dy = dy >= 0 ? 'up' : 'down';
 
-          $(window).trigger('conformedwheel', {
-            directionX: dx,
-            directionY: dy
-          });
+          var obj = {};
+
+          if(dx != 0){
+            obj.dx = dx > 0 ? 'right' : 'left';
+          }
+
+          if(dy != 0){
+            obj.dy = dy > 0 ? 'up' : 'down';
+          }
+
+          $(window).trigger('conformedwheel', obj);
           $(window).trigger('scroll');
+
           wheelTimer = setTimeout(function(){
             wheelDelta = null;
           }, settings.mousewheel.timeout);
@@ -254,6 +267,13 @@ define([
         $.scrollTo(getNextArticle(), settings.scroll.duration);
       } else {
         loader();
+      }
+    };
+
+    var scrollX = function(direction){
+      if(direction == 'right'){
+        var path = self.activeArticle().data('path');
+        document.location.href = 'article/' + path;
       }
     };
   };

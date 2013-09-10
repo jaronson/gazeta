@@ -12,6 +12,11 @@ define([
     },
     mousewheel: {
       timeout: 700
+    },
+    animation: {
+      swipe: {
+        duration: 300
+      }
     }
   };
 

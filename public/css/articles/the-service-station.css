@@ -1,21 +1,29 @@
 /*! article: the-service-station.css */
+@font-face { font-family: "Hermes Web"; src: url("/fonts/hermes/hermes-regular-webfont.eot"); src: url("/fonts/hermes/hermes-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/hermes/hermes-regular-webfont.woff") format("woff"), url("/fonts/hermes/hermes-regular.ttf") format("truetype"); font-weight: normal; font-style: normal; }
+
+@font-face { font-family: "Hermes Web"; src: url("/fonts/hermes/hermes-bold-webfont.eot"); src: url("/fonts/hermes/hermes-bold-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/hermes/hermes-bold-webfont.woff") format("woff"), url("/fonts/hermes/hermes-bold.ttf") format("truetype"); font-weight: bold; font-style: normal; }
+
+@font-face { font-family: "Hermes Web"; src: url("/fonts/hermes/hermes-black-webfont.eot"); src: url("/fonts/hermes/hermes-black-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/hermes/hermes-black-webfont.woff") format("woff"), url("/fonts/hermes/hermes-black.ttf") format("truetype"); font-weight: 800; font-style: normal; }
+
 .video-wrap { height: 200px; background-color: #2f2b23; }
 
-.section.service-intro { font-family: "Century Expanded Web", "Georgia", "Times", serif; min-height: 900px; background-color: #2f2b23; color: #c69c6d; }
-.section.service-intro h1 { text-transform: uppercase; font-family: "Hermes Web"; font-weight: 800; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90); opacity: 0.9; text-shadow: rgba(237, 88, 21, 0.2) 0px -0.075em 0px, rgba(237, 88, 21, 0.2) 0.05em 0.175em 0px; color: white; }
+article.the-service-station { background-color: #2f2b23; }
+
+.section.service-intro { font-family: "Century Expanded Web", "Georgia", "Times", serif; background-color: #2f2b23; color: #c69c6d; }
+.section.service-intro h1 { text-transform: uppercase; font-family: "Hermes Web"; font-weight: 800; text-shadow: rgba(237, 88, 21, 0.2) 0px -2px 0px, rgba(237, 88, 21, 0.2) 2px 5px 0px; color: white; }
 .section.service-intro h1.callout { padding-right: 1em; }
-.section.service-intro h1.chap { color: white; }
+.section.service-intro h1.chap { margin-top: 0; color: white; }
 .section.service-intro h2, .section.service-intro p { color: white; font-family: "Century Expanded Web", "Georgia", "Times", serif; font-weight: normal; text-shadow: #2f2b23 0.25em 0.25em 0.5em; }
 .section.service-intro .row { position: relative; z-index: 10; }
 .section.service-intro .columns { position: relative; z-index: 10; }
 .section.service-intro .map-container { width: 100%; position: absolute; z-index: 5; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40); opacity: 0.4; }
-.section.service-intro .map-container .map { height: 900px; width: 100%; }
+.section.service-intro .map-container .map { width: 100%; }
 
 .hide-video { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
 
 .yt-player { background: black; }
 
-.drive-animation { z-index: 1; height: 900px; width: 100%; overflow: hidden; position: absolute; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
+.drive-animation { z-index: 1; width: 100%; overflow: hidden; position: absolute; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
 .drive-animation .step { position: absolute; height: 500px; width: 100%; top: 0; left: 0; }
 .drive-animation .step .frame { height: 500px; width: 100%; }
 

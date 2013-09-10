@@ -1,9 +1,11 @@
 .section{ :class => "demo#{@params[:day].to_i}" }
-  .small-5.columns
-    %h1.textfill= @params[:name]
-  .small-7.columns
-    %h3= "#{@params[:year]}/#{@params[:month]}/#{@params[:day]}"
-    %p.lead Section 1
+  .row
+    .small-5.columns
+      %h1.textfill= @params[:name]
+    .small-7.columns
+      %h3= "#{@params[:year]}/#{@params[:month]}/#{@params[:day]}"
+      %p.lead Section 1
 .section
-  .small-7.small-offset-5.columns
-    %p.lead Section 2
+  .row
+    .small-7.small-offset-5.columns
+      %p.lead Section 2

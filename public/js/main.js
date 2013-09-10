@@ -27,9 +27,9 @@ require([
     var app = new App();
     app.start();
 
+    $('.textfill').textfill();
+
     var router = new Router();
     router.start();
-
-    $('.textfill').textfill();
   });
 });

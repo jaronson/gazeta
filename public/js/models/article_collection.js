@@ -13,6 +13,7 @@ define([
 
     this.manifest;
     this.dates = [];
+    this.count = 0;
     this.loadedArticles   = [];
     this.renderedArticles = [];
 
@@ -85,6 +86,7 @@ define([
         name: attrs.name,
         direction: direction,
         index: index,
+        number: self.count - index,
         dateline: attrs.dateline,
         initial: attrs.initial
       });
@@ -116,6 +118,7 @@ define([
         success: function(json){
           parseManifest(json);
           setFrom();
+          self.count = self.manifest.length;
 
           if(options.callback){
             $.proxy(options.callback, self)();
