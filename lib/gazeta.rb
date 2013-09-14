@@ -1,9 +1,14 @@
+require 'sinatra/partial'
 require 'sinatra/json'
 require 'yaml'
 
 module Sinatra
 module Gazeta
   module Helpers
+    def part(name, attrs = {})
+      partial("partials/#{name}", :locals => { :attrs => attrs })
+    end
+
     def get_manifest
       Gazeta.manifest("#{settings.views}/manifest.yml")
     end
@@ -40,6 +45,7 @@ module Gazeta
   @@manifest = nil
 
   def self.registered(app)
+    app.register(Sinatra::Partial)
     app.helpers(Gazeta::Helpers)
 
     [ :css, :js ].each do |type|
