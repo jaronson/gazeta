@@ -1,4 +1,0 @@
-define([
-  'utils'
-], function(utils){
-});
