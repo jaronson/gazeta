@@ -118,7 +118,7 @@ header {
     }
   }
 
-  .right {
+  .left {
     @extend .clearfix;
     padding: 0.33em;
     padding-right: $column-gutter / 2;
@@ -128,7 +128,7 @@ header {
 
   .wordmark {
     height: $header-size;
-    float: right;
+    float: left;
     margin: 0;
 
     img {
