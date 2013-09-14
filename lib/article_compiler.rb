@@ -25,9 +25,8 @@ class ArticleCompiler
               end
               aname   = get_article_name(line)
               article = []
+              article << line
             end
-
-            article << line
           else
             main << line
           end
