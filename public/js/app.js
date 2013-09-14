@@ -1,20 +1,12 @@
 define([
   'jquery',
+  'router',
   'jquery.textfill'
-], function($){
+], function($, Router){
   return function(){
-    this.start = function(){
-      $(window).on('load scroll', function(){
-        repositionHeader();
-      });
+    $('.textfill').textfill();
 
-      $(window).on('resize', function(){
-        $('layout').css('width', $(window).width() + 'px');
-      });
-    };
-
-    var repositionHeader = function(){
-      $('header').css('top', $(window).scrollTop());
-    };
+    var router = new Router();
+    router.start();
   };
 });

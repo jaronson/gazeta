@@ -44,6 +44,7 @@ class ArticleCompiler
       puts "writing #{aname}"
 
       fname = File.join(File.expand_path("../../public/css/articles", __FILE__), aname)
+
       File.open(fname, 'w') do |file|
         file.write(lines.join(''))
       end

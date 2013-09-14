@@ -1,6 +1,7 @@
-require.config({
-  baseUrl: '/js',
-  urlArgs: 'bust=' + Math.random(),
+({
+  baseUrl: 'public/js',
+  name:    'main',
+  out:     'public/js/libs/main.built.js',
   paths: {
     'jquery':          'libs/jquery.min',
     'jquery.scrollto': 'libs/jquery.scrollto.min',
@@ -10,11 +11,4 @@ require.config({
     'jquery.scrollto': [ 'jquery' ],
     'jquery.textfill': [ 'jquery' ]
   }
-});
-
-require([
-  'jquery',
-  'app'
-], function($, App){
-  var app = new App();
-});
+})

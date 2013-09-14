@@ -8,4 +8,12 @@
     = haml :header
     %layout
       = yield
-    %script{ :type => 'text/javascript', :src => '/js/libs/require.min.js', :'data-main' => '/js/main' }
+    %script{ :type => 'text/javascript', :src => '/js/libs/require.min.js' }
+    :javascript
+      require.config({
+        paths: {
+          main: '/js/main'
+          //main: '/js/libs/main.built'
+        }
+      });
+      require(['main']);
