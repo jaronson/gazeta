@@ -42,9 +42,8 @@ $portrait:      "only screen and (orientation: portrait)";
 
 // Font families
 $font-family-futura:       "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-$font-family-trade-gothic: 'Trade Gothic Web', 'Helvetica Neue', 'Helvetica', sans-serif;
+$font-family-helvetica:    "Akzidenz Grotesk Web", "Helvetica Neue", "Helvetica", Arial, sans-serif;
 $font-family-century:      'Century Expanded Web', 'Georgia', 'Times', serif;
-$font-family-neutraface:   'Neutraface Condensed Web';
 $font-family-hermes:       'Hermes Web';
 
 // Change whether or not you include browser prefixes
@@ -56,7 +55,7 @@ $default-float: left;
 
 $body-bg: $color-light;
 $body-font-color: $color-dark;
-$body-font-family: $font-family-futura;
+$body-font-family: $font-family-helvetica;
 $body-font-weight: 200;
 $body-font-style: normal;
 
@@ -873,7 +872,7 @@ $custom-select-disabled-color: #888;
 
 // Background and border styles
 
-$panel-bg: darken($color-light, 5%);
+$panel-bg: $color-neutral;
 $panel-border-style: none;
 $panel-border-size: 0;
 

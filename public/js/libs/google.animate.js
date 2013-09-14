@@ -1,10 +1,4 @@
-require([
-  'jquery'
-], function($){
-  if(typeof window.google == 'undefined'){
-    return false;
-  }
-
+(function($){
   google.animate = {};
 
   google.animate.Map = function(){
@@ -143,7 +137,7 @@ require([
       self.direction == 'prev' ? self.stepIndex-- : self.stepIndex++;
       var step = self.steps[self.stepIndex];
       if(self.fade != null){
-        setOpacity(step.fade);
+        //setOpacity(step.fade);
       }
       updatePanorama(self.panorama, step);
       logStep(step);
@@ -161,6 +155,9 @@ require([
 
     var init = function(){
       setSteps();
+
+      var h = self.target.closest('.section').height();
+      self.target.css('height', h + 'px');
 
       self.panorama = newPanorama(self.target.get(0));
       self.step();
@@ -269,4 +266,4 @@ require([
 
     init();
   };
-});
+})(jQuery);

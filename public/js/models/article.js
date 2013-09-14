@@ -1,155 +1,146 @@
 define([
   'jquery',
   'utils',
-  'settings',
-  'helpers/view'
-], function($, utils, settings, view){
+  'helpers/view',
+  'models/section_collection'
+], function($, utils, view, SectionCollection){
   return function(attrs){
-    var self = this;
+    var self     = this;
+
+    this.name     = 'article';
+    this.url      = {};
+    this.target   = null;
+    this.loader   = null;
+    this.html     = null;
+    this.sections = null;
+
     var rendered = false;
+    var evt      = new utils.EventHandler(this.name, this);
 
-    this.date       = attrs.date;
-    this.name       = attrs.name;
-    this.index      = attrs.index;
-    this.number     = attrs.number;
-    this.initial    = attrs.initial || false;
-    this.direction  = attrs.direction == 'prev' ? 'up' : 'down';
-    this.dateline   = attrs.dateline;
-    this.path       = attrs.date + '/' + this.name;
-    this.articleId  = 'article-' + self.name + '-' + Math.random().toString().replace('.','');
-    this.selector   = '#' + this.articleId;
-    this.cssUrl     = '/css/articles/' + this.name + '.css';
-    this.target;
-    this.loader;
-    this.html;
-
+    // Initializer
     var init = function(){
+      self.date        = attrs.date;
+      self.name        = attrs.name;
+      self.index       = attrs.index;
+      self.number      = self.index + 1;
+      self.isInitial   = attrs.initial;
+      self.isActive    = attrs.active;
+      self.direction   = attrs.direction == 'prev' ? 'up' : 'down';
+      self.hasDateline = attrs.dateline;
+
+      self.activeSectionNumber = attrs.section;
+
+      setArticleId();
+      setPath();
+      setSelector();
+      setUrls();
     };
 
-    this.isAfter = function(other){
-      return other.idnex > self.index;
-    };
-
-    this.isBefore = function(other){
-      return other.index < self.index;
-    };
-
-    this.loadStylesheet = function(){
-      utils.ajax.fileExists({
-        url: self.cssUrl,
-        success: function(){
-          var link = $('<link/>').attr('rel', 'stylesheet').
-            attr('href', self.cssUrl).
-            attr('type', 'text/css');
-
-          link.appendTo($('head'));
-        }
-      });
-    };
-
-    this.render = function(){
+    // Public
+    this.render = function render(){
       if(rendered){
         return false;
+      } else {
+        rendered = true;
       }
 
-      rendered = true;
-
-      self.loadStylesheet();
       setTarget();
+      setSections();
+      insertLoader();
 
-      if(self.dateline){
-        addDateline();
-      }
+      utils.import.css(self.url.css);
+      utils.import.js(self.url.js);
 
-      addLoader();
+      insertDateline();
 
       $.ajax({
-        method: 'GET',
-        url: '/article/' + self.path,
+        method:  'GET',
+        url:     utils.join.path('/article', self.path),
         success: function(html){
           self.html = $(html);
-          self.target.trigger('populate');
+          evt.trigger('populate');
         }
       });
     };
 
-    this.rendered = function(){
-      return rendered;
+    this.populate = function(){
+      removeLoader();
+      self.html.appendTo(self.target);
+
+      var sel = self.selector + ' ' + view.selectors.section;
+
+      evt.watch(sel, evt.keys.section.init, function(e, section){
+        evt.trigger('init');
+      });
+
+      evt.watch(sel, evt.keys.section.done, function(e, section){
+        self.target.trigger('textfill');
+      });
+
+      evt.trigger('done');
     };
 
-    this.sections = function(){
-      return self.target.find(settings.selectors.section);
-    }
-
-    var addLoader = function(){
-      self.loader = $('<loader/>').appendTo(self.target);
-    };
-
-    var addDateline = function(){
-      var dateline = view.dateSeparator(self.date);
-      dateline.appendTo(self.target);
-    };
-
-    var addPageNumbers = function(){
-      for(var i = 0, l = self.sections().length; i < l; ++i){
-        var section = $(self.sections()[i]);
-        var number  = $('<number/>');
-        var major   = $('<major/>').text(self.number);
-        var minor   = $('<minor/>').text(i + 1);
-
-        major.appendTo(number);
-        minor.appendTo(number);
-        number.appendTo(section);
+    // Private
+    var insertDateline = function(){
+      if(self.hasDateline){
+        self.dateline = view.separator.date(self.date).
+          appendTo(self.target);
       }
     };
 
-    var addSectionClasses = function(){
-      self.sections().each(function(i){
-        $(this).addClass('section-' + (i + 1));
-      });
+    var insertLoader = function(){
+      self.loader = utils.tag.create('loader').appendTo(self.target);
     };
 
     var removeLoader = function(){
       self.loader.remove();
     };
 
+    var setArticleId = function(){
+      self.articleId = utils.join.attr(
+        'article',
+        self.name,
+        utils.rand()
+      );
+    };
+
+    var setPath = function(){
+      self.path = utils.join.path(attrs.date, self.name);
+    };
+
+    var setSections = function(){
+      self.sections = new SectionCollection(self);
+    };
+
+    var setSelector = function(){
+      self.selector = '#' + self.articleId;
+    };
+
     var setTarget = function(){
-      self.target = $('<article/>').
+      self.target = utils.tag.create('article').
         addClass(self.name).
         attr('id', self.articleId).
-        attr('data-path', self.path);
+        attr('data-path', self.path).
+        attr('data-number', self.number);
 
       if(self.direction == 'up'){
-        self.target.prependTo(settings.$layout());
+        self.target.prependTo(view.$layout());
       } else {
-        self.target.appendTo(settings.$layout());
+        self.target.appendTo(view.$layout());
       }
 
-      self.target.trigger('article.load', self);
-
-      self.target.on('populate', function(){
-        removeLoader();
-
-        $(self.html).appendTo(self.target);
-
-        addSectionClasses();
-        addPageNumbers();
-        fitToScreen();
-
-        self.target.trigger('article.populate', self);
-
-        if(self.initial){
-          self.target.trigger('article.init', self);
-        }
+      evt.observe('populate', function(){
+        self.populate();
       });
 
-      $(window).on('resize orientationchange', function(){
-        fitToScreen();
+      evt.watch(document, evt.keys.article.active, function(e){
+        self.isActive = self.number == $(e.target).data('number');
       });
     };
 
-    var fitToScreen = function(){
-      self.sections().css('min-height', $(window).height() + 'px');
+    var setUrls = function(){
+      self.url.css = utils.join.path('css', 'articles', self.name + '.css');
+      self.url.js  = utils.join.path('js',  'articles', self.name + '.js');
     };
 
     init();

@@ -11,21 +11,21 @@ article.the-service-station { background-color: #2f2b23; }
 
 .section.service-intro { font-family: "Century Expanded Web", "Georgia", "Times", serif; background-color: #2f2b23; color: #c69c6d; }
 .section.service-intro h1 { text-transform: uppercase; font-family: "Hermes Web"; font-weight: 800; text-shadow: rgba(237, 88, 21, 0.2) 0px -2px 0px, rgba(237, 88, 21, 0.2) 2px 5px 0px; color: white; }
-.section.service-intro h1.callout { padding-right: 1em; }
+.section.service-intro h1.service { letter-spacing: -0.01em; }
 .section.service-intro h1.chap { margin-top: 0; color: white; }
-.section.service-intro h2, .section.service-intro p { color: white; font-family: "Century Expanded Web", "Georgia", "Times", serif; font-weight: normal; text-shadow: #2f2b23 0.25em 0.25em 0.5em; }
+.section.service-intro h2, .section.service-intro p, .section.service-intro footer note, section footer .section.service-intro note { color: white; font-family: "Century Expanded Web", "Georgia", "Times", serif; font-weight: normal; text-shadow: #2f2b23 0.25em 0.25em 0.5em; }
 .section.service-intro .row { position: relative; z-index: 10; }
 .section.service-intro .columns { position: relative; z-index: 10; }
-.section.service-intro .map-container { width: 100%; position: absolute; z-index: 5; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40); opacity: 0.4; }
+.section.service-intro .map-container { width: 100%; position: absolute; z-index: 5; top: 0; left: 0; }
 .section.service-intro .map-container .map { width: 100%; }
 
 .hide-video { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
 
 .yt-player { background: black; }
 
-.drive-animation { z-index: 1; width: 100%; overflow: hidden; position: absolute; top: 0; left: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity: 0.5; }
-.drive-animation .step { position: absolute; height: 500px; width: 100%; top: 0; left: 0; }
-.drive-animation .step .frame { height: 500px; width: 100%; }
+.drive-animation { z-index: 1; width: 100%; overflow: hidden; position: absolute; top: 0; left: 0; }
+.drive-animation .step { position: absolute; width: 100%; top: 0; left: 0; }
+.drive-animation .step .frame { width: 100%; }
 
 .animation-controls { margin-top: 1em; }
 .animation-controls input[type="text"] { max-width: 80px; }

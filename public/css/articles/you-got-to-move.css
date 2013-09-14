@@ -2,6 +2,6 @@
 @font-face { font-family: "Prisma Web"; src: url("/fonts/prisma/prisma-webfont.eot"); src: url("/fonts/prisma/prisma-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/prisma/prisma-webfont.woff") format("woff"), url("/fonts/prisma/prisma.ttf") format("truetype"); font-weight: normal; font-style: normal; }
 
 .section.mfm { background-color: #2a1807; color: white; }
-.section.mfm h1 { text-transform: uppercase; color: #e3ceb6; font-weight: 400; font-family: 'Prisma Web'; letter-spacing: 0.01em; }
-.section.mfm h3 { font-weight: 200; font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; color: white; }
+.section.mfm h1 { text-transform: uppercase; color: #e3ceb6; font-weight: 400; font-family: 'Prisma Web'; letter-spacing: -0.01em; }
+.section.mfm h3 { font-weight: 400; font-family: "Futura LT Web", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; color: white; }
 

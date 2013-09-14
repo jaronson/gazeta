@@ -1,36 +1,64 @@
 define([
   'jquery'
 ], function($){
-  var settings = {
-    selectors: {
-      layout: 'layout',
-      article: 'article',
-      section: '.section,section'
-    },
-    scroll: {
-      duration: 260 
-    },
-    mousewheel: {
-      timeout: 700
-    },
+  return {
     animation: {
       swipe: {
         duration: 300
       }
+    },
+
+    event: {
+      router: {
+        done: 'routerdone'
+      },
+
+      article: {
+        init:     'articleinitialized',
+        load:     'articleloaded',
+        populate: 'articlepopulated',
+        done:     'articledone',
+        active:   'articleactivated'
+      },
+      section: {
+        init:   'sectioninitialized',
+        load:   'sectionloaded',
+        done:   'sectiondone',
+        active: 'sectionactivated'
+      }
+    },
+
+    log: {
+      events: false
+    },
+
+    mousewheel: {
+      timeout: 700
+    },
+
+    scroll: {
+      duration: 0,
+      section:  50
+    },
+
+    selectors: {
+      layout:  'layout',
+      article: 'article',
+      section: '.section,section'
+    },
+
+    separator: {
+      attr: '-',
+      path: '/'
+    },
+
+    tag: {
+      article: 'article',
+      loader:  'loader',
+      section: 'section',
+      number:  'number',
+      major:   'major',
+      minor:   'minor'
     }
   };
-
-  settings.$layout = function(){ 
-    return $(settings.selectors.layout);
-  };
-
-  settings.$articles = function(){
-    return settings.$layout().find(settings.selectors.article);
-  };
-
-  settings.$sections = function(){
-    return $(settings.$layout()).find(settings.selectors.section);
-  };
-
-  return settings;
 });

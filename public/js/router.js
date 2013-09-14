@@ -1,163 +1,57 @@
 define([
-  'jquery',
-  'settings',
-  'models/article_collection'
-], function($, settings, ArticleCollection){
-  return function(options){
+  'utils',
+  'models/article_collection',
+  'helpers/view'
+], function(utils, ArticleCollection, view){
+  return function(){
     var self = this;
-    var activeArticle;
-    var activeSection;
-    var logEvents = false;
+    var evt  = new utils.EventHandler('router', this);
 
-    this.defaults = {
-    };
+    this.active = {};
 
-    this.activeArticle = function(){
-      return $(activeArticle);
-    };
-
-    this.activeSection = function(){
-      return $(activeSection);
-    };
-
-    this.atPageStart = function(){
-      return $(document).scrollTop() == 0;
-    };
-
-    this.atPageEnd = function(){
-      return (document.documentElement.clientHeight +
-        $(document).scrollTop()) >= document.body.offsetHeight;
-    };
-
-    this.logEvent = function(msg){
-      if(!logEvents){
-        return;
-      }
-
-      console.log('event: ' + msg);
-    };
-
-    this.start = function(){
-      setOptions();
-
-      if(document.location.pathname == '/'){
+    this.routes = {
+      '/': function(){
         loadIndex();
-        //conformMousewheel();
-      } else {
-        $(window).trigger('textfill');
       }
     };
 
-    var loadIndex = function(){
-      var from = getAnchorPath();
+    // Public
 
-      self.collection = new ArticleCollection({
-        from: from,
-        callback: function(){
-          this.next().render();
+    this.start = function start(){
+      for(path in self.routes){
+        if(document.location.pathname == path){
+          self.routes[path]();
         }
-      });
-
-      $(document).on('article.init', function(){
-        self.logEvent('article.init');
-
-        setActiveArticle();
-        setActiveSection();
-
-        loadMore();
-
-        if(activeArticle){
-          $.scrollTo(self.activeArticle(), 0);
-        }
-      });
-
-      $(document).on('article.populate', function(e, article){
-        self.logEvent('article.populate');
-
-        if(article.direction == 'up'){
-          $.scrollTo(self.activeArticle(), 0);
-        }
-      });
-
-      $(document).on('scroll', function(e){
-        self.logEvent('document.scroll');
-
-        setActiveArticle();
-        setActiveSection();
-
-        loadMore();
-      });
-
-      $(document).on('article.activeChanged', function(){
-        self.logEvent('article.activeChanged');
-        setActiveAnchor();
-
-        $(window).trigger('load');
-        $(window).trigger('textfill');
-      });
-
-      $(window).on('conformedwheel', function(evt, d){
-        if(d.dy){
-          scrollY(d.dy);
-        } else if(d.dx){
-          scrollX(d.dx);
-        }
-      });
-    };
-
-    var loadMore = function(){
-      if(self.atPageEnd()){
-        self.collection.next().render();
-      }
-
-      if(self.atPageStart()){
-        self.collection.prev().render();
       }
     };
 
-    var getAnchorPath = function(){
-      var path = document.location.hash.toString();
-      path     = path.replace('#!/','');
-
-      if($.trim(path) != ''){
-        return path;
+    this.setActive = function setActive(){
+      for(var i = 0, l = arguments.length; i < l; ++i){
+        self.findActive(arguments[i]);
       }
     };
 
-    var setActiveAnchor = function(){
-      var path = self.activeArticle().data('path');
-      setLocationHash(path);
-    };
-
-    var setActiveArticle = function(){
-      var articles = settings.$articles();
-      var active   = getActive(articles);
+    this.findActive = function findActive(key){
+      var selector = view.selectors[key];
+      var active = this.activeElement($(selector));
 
       if(!active){
         return;
       }
 
-      if(!activeArticle || active.attr('id') != $(activeArticle).attr('id')){
-        activeArticle = active.get(0);
-        active.trigger('article.activeChanged');
+      var prev = self.active[selector];
+
+      if(!prev || active.data('number') != $(prev).data('number')){
+        self.active[selector] = active.get(0);
+        evt.send(active, evt.keys[key].active);
       }
     };
 
-    var setActiveSection = function(){
-      var sections = settings.$sections();
-      var aSection = getActive(sections);
-
-      if(!aSection){
-        return;
-      }
-
-      if(!activeSection || aSection.get(0) != activeSection){
-        activeSection = aSection.get(0);
-        settings.$layout().trigger('section.activeChanged');
-      }
+    this.getActive = function getActive(name){
+      return $(self.active[view.selectors[name]]);
     };
 
-    var getActive = function(scope){
+    this.activeElement = function(scope){
       if(scope.length == 1){
         return scope;
       }
@@ -186,94 +80,86 @@ define([
           visible = v;
         }
       }
+
       return active;
     };
 
-    var clearLocationHash = function(){
-      document.location.hash = '';
+    this.atPageStart = function(){
+      return $(document).scrollTop() == 0;
     };
 
-    var getLocationHash = function(){
-      return document.location.hash;
+    this.atPageEnd = function(){
+      return (document.documentElement.clientHeight +
+        $(document).scrollTop()) >= document.body.offsetHeight;
     };
 
-    var setLocationHash = function(path){
+    // Private
+    var getAnchorPath = function getAnchorPath(){
+      var path = document.location.hash.toString();
+      path     = path.replace('#!/','');
+
+      if($.trim(path) != ''){
+        return path;
+      }
+    };
+
+    var setAnchorPath = function setAnchorPath(){
+      var path = self.getActive('article').data('path');
+      var section = self.getActive('section');
+
+      if(section.length > 0){
+        path = path + '/' + section.data('number');
+      }
+
       document.location.replace('#!/' + path);
     };
 
-    var setOptions = function(){
-      var attrs = $.extend({}, self.defaults, options);
+    var loadIndex = function loadIndex(){
+      var from = getAnchorPath();
 
-      for(key in attrs){
-        self[key] = attrs[key];
-      }
-    };
-
-    var conformMousewheel = function(){
-      var wheelDelta;
-      var wheelTimer;
-
-      $(window).on('mousewheel', function(e, d, dx, dy){
-        if(!wheelDelta){
-          wheelDelta = d;
-
-          var obj = {};
-
-          if(dx != 0){
-            obj.dx = dx > 0 ? 'right' : 'left';
-          }
-
-          if(dy != 0){
-            obj.dy = dy > 0 ? 'up' : 'down';
-          }
-
-          $(window).trigger('conformedwheel', obj);
-          $(window).trigger('scroll');
-
-          wheelTimer = setTimeout(function(){
-            wheelDelta = null;
-          }, settings.mousewheel.timeout);
+      self.collection = new ArticleCollection({
+        from: from,
+        callback: function(){
+          this.next().render();
         }
+      });
 
-        e.stopImmediatePropagation(); e.stopPropagation();
-        return false;
+      evt.watch(document, evt.keys.section.init, function(e, section){
+        self.active[view.selectors.article] = section.article.target.get(0);
+        self.active[view.selectors.section] = section.target.get(0);
+
+        utils.scrollTo(section);
+
+        setAnchorPath();
+
+        evt.watch(window, 'scroll', function(e){
+          self.setActive('article', 'section');
+          loadMore();
+        });
+
+        evt.watch(document, evt.keys.section.active, function(){
+          setAnchorPath();
+        });
+
+        evt.watch(document, evt.keys.article.active, function(){
+          setAnchorPath();
+        });
+
+        evt.watch(document, evt.keys.article.populate, function(e, article){
+          if(article.direction == 'up'){
+            utils.scrollTo(self.getActive('section'));
+          }
+        });
       });
     };
 
-    var scrollY = function(direction){
-      var getNextSection = function(){
-        return direction == 'up' ? self.activeSection().prev() :
-          self.activeSection().next();
-      };
-
-      var getNextArticle = function(){
-        return direction == 'up' ? self.activeArticle().prev() :
-          self.activeArticle().next();
-      };
-
-      var loader = function(){
-        return direction == 'up' ? self.collection.prev().render() :
-          self.collection.next().render();
-      };
-
-      var scroller = function(e, article){
-        $.scrollTo('#' + article.articleId);
-        settings.$layout().off('article.load', scroller);
-      };
-
-      settings.$layout().on('article.load', scroller);
-
-      if(getNextArticle().length > 0){
-        $.scrollTo(getNextArticle(), settings.scroll.duration);
-      } else {
-        loader();
+    var loadMore = function loadMore(){
+      if(self.atPageEnd()){
+        self.collection.next().render();
       }
-    };
 
-    var scrollX = function(direction){
-      if(direction == 'right'){
-        var path = self.activeArticle().data('path');
-        document.location.href = 'article/' + path;
+      if(self.atPageStart()){
+        self.collection.prev().render();
       }
     };
   };

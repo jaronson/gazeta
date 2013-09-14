@@ -5,8 +5,20 @@
 }
 
 @media #{ $large }{
+  body {
+    font-size: 1.1em;
+  }
+
   h1 {
-    font-size: 8em;
-    line-height: 0.8;
+    font-size: 5em;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 3.4em;
+  }
+
+  h3 {
+    font-size: 3em;
   }
 }

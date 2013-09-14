@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <markers>
   <line>
-    <point index="" lat='37.291260' lng='-88.862880' fade="0.1" pitch="-25" heading="-70" interval="1200"/>
+    <point index="" lat='37.291260' lng='-88.862880' fade="0.1" pitch="-25" heading="-70" interval="300"/>
     <point index="" lat='37.291230' lng='-88.864580' />
     <point index="" lat='37.291220' lng='-88.865100' />
     <point index="" lat='37.291210' lng='-88.865550' />

@@ -37,7 +37,7 @@
     },
     emBase:     16,
     defaultOptions: {
-      timeout:        150,
+      timeout:        200,
       resizeDuration: 0,
       fadeDuration:   100,
       easing:         'swing'
@@ -141,7 +141,6 @@
     this.options = options;
     this.timer   = null;
 
-    var origW   = this.scope.width();
     var baseS   = parseFloat($(document.body).css('font-size'));
 
     var initialized = false;
@@ -160,6 +159,7 @@
       var origW = self.scope.width();
       var ratio;
       var fs, sw;
+      var lineHeight = self.scope.data('line-height') || 0.8;
 
       self.scope.css({
         'display': 'inline',
@@ -174,7 +174,7 @@
         'display':     'block',
         'white-space': 'nowrap',
         'font-size':    fs.toString() + 'px',
-        'line-height':  '0.8',
+        'line-height':  lineHeight,
         'margin-bottom': baseS * 2
       });
 
@@ -188,7 +188,7 @@
     $fn.addElements(e.target);
   });
 
-  $(window).on('textfill resize', function(){
+  $(window).on('textfill load resize', function(){
     $fn.resize();
   });
 

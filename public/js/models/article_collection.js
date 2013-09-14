@@ -1,21 +1,25 @@
 define([
   'jquery',
-  'models/article',
-  'settings'
-], function($, Article, settings){
+  'models/article'
+], function($, Article){
   return function(opts){
-    var options = opts || {};
     var self = this;
+    var options = opts || {};
 
     var prevIndex = 0;
     var nextIndex = -1;
     var fromIndex = 0;
+    var section;
 
     this.manifest;
     this.dates = [];
     this.count = 0;
     this.loadedArticles   = [];
     this.renderedArticles = [];
+
+    var init = function(){
+      loadManifest()
+    };
 
     this.prev = function(count){
       loadArticles(count, 'prev');
@@ -37,10 +41,6 @@ define([
       self.loadedArticles = [];
 
       return self;
-    };
-
-    var init = function(){
-      loadManifest()
     };
 
     var addArticle = function(array, article, direction){
@@ -67,18 +67,22 @@ define([
 
       attrs = self.manifest[index];
 
-      if(index == fromIndex){
-        attrs.initial = true;
-      }
-
       if(!attrs){
         return;
       }
 
-      var dateline = false;
+      if(index == fromIndex){
+        attrs.initial = true;
+      }
 
       if(!firstOfManifest(attrs) && firstOfDate(attrs)){
         attrs.dateline = true;
+      }
+
+      if(attrs.initial && !section){
+        attrs.section = 1;
+      } else if(attrs.initial){
+        attrs.section = section;
       }
 
       var article = new Article({
@@ -88,7 +92,9 @@ define([
         index: index,
         number: self.count - index,
         dateline: attrs.dateline,
-        initial: attrs.initial
+        initial: attrs.initial,
+        active:  attrs.initial,
+        section: attrs.section
       });
 
       return article;
@@ -142,14 +148,26 @@ define([
     var setFrom = function(){
       if(options.from){
         var parts = options.from.split('/');
-        var name  = parts.pop();
+        var name;
+
+        if(parts.length > 4){
+          section = parts.pop();
+          name    = parts.pop();
+        } else {
+          name = parts.pop();
+        }
+
         var date  = parts.join('/');
         var from  = self.manifest.filter(function(o){
           return o.name == name && o.date == date;
         })[0];
 
         index = self.manifest.indexOf(from);
-        
+
+        if(index < 0){
+          return false;
+        }
+
         nextIndex = index - 1;
         prevIndex = index;
         fromIndex = index;

@@ -1,0 +1,22 @@
+.jp-jplayer{ :id => "jplayer-#{attrs[:name]}" }
+.jp-audio{ :id => "jplayer-#{attrs[:name]}-container" }
+  .jp-type-single
+    .jp-gui.jp-interface
+      %ul.jp-controls
+        %li
+          %a.jp-play{ :href => 'javascript:;' } play
+        %li
+          %a.jp-pause{ :href => 'javascript:;' } pause
+      .jp-progress
+        .jp-seek-bar
+          .jp-play-bar
+      .jp-volume-bar
+        .jp-volume-bar-value
+      .jp-time-holder
+        .jp-current-time
+        .jp-duration
+        %ul.jp-toggles
+          %li
+            %a.jp-repeat{ :href => ''} repeat
+          %li
+            %a.jp-repeat-off{ :href => ''} repeat off

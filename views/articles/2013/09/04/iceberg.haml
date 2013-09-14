@@ -2,9 +2,18 @@
   .row
     .small-12.large-8.columns
       = part('figure', :image => 'iceberg.jpg', :title => 'Iceberg', :year => '2013', :media => 'Acrylic on canvas', :tags => ['ephemera', 'art'])
+
+      .panel
+        %p.lead The Road: A Comedic Translation
+        %p Pitch-perfect lampooning of Cormac Mccarthy's verbose, Faulknerian esotericism. A madman's timeshare.
+        %p
+          %a{ :href => 'http://www.themillions.com/2009/10/the-road-a-comedic-translation.html' }http://www.themillions.com/2009/10/the-road-a-comedic-translation.html
     .small-12.large-4.columns
-      %lyrics
-        %worktitle Be Kind
+      %lyrics.be-kind
+        %worktitle
+          Be Kind
+        %p
+          = part('audio', :color => 'white', :src => 'https://dl.dropboxusercontent.com/u/10730648/Be%20Kind.wav')
         %p
           be kind, be gentle, be meek<br/>
           know that all living seek<br/>

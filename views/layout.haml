@@ -8,5 +8,5 @@
     = haml :header
     %layout
       = yield
+    %script{ :src => 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJCfnRfOtohEqUAMmA_mWWVFhnKf7LpU&sensor=false'}
     %script{ :type => 'text/javascript', :src => '/js/libs/require.min.js', :'data-main' => '/js/main' }
-    -#%script{ :src => 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJCfnRfOtohEqUAMmA_mWWVFhnKf7LpU&sensor=false'}

@@ -30,12 +30,14 @@ $color-brown-darker-warm: #603913;
 $color-brown-darkest-warm: #422b23;
 
 $primary-colors:
-  orange $color-orange $color-light,
-  green $color-green $color-light,
-  blue $color-blue $color-light,
-  pink $color-pink $color-dark,
-  yellow $color-yellow $color-dark,
-  teal $color-teal $color-dark;
+  black $color-dark $color-light white,
+  white $color-light $color-dark black,
+  orange $color-orange $color-light white,
+  green $color-green $color-light white,
+  blue $color-blue $color-light white,
+  pink $color-pink $color-light white,
+  yellow $color-yellow $color-dark black,
+  teal $color-teal $color-dark black;
 
 @each $item in $primary-colors {
   $name: nth($item, 1);
