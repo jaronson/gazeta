@@ -1,7 +1,12 @@
 ---
-  :2013/09/04:
-    - demo1
-    - demo2
-  :2013/09/03:
-    - demo3
-    - demo4
+  :default:
+    :2013/09/04:
+      - demo1
+      - demo2
+    :2013/09/03:
+      - demo3
+      - demo4
+  :demo:
+    :2013/08/03:
+      - demo3
+      - demo4

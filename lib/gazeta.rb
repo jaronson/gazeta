@@ -70,7 +70,14 @@ module Gazeta
     end
 
     app.get '/manifest.json' do
-      json get_manifest
+      manifest  = get_manifest
+      subdomain = request.host.split('.').first.to_sym
+
+      if manifest[subdomain]
+        json manifest[subdomain]
+      else
+        json manifest[:default]
+      end
     end
 
     app.get '/' do
